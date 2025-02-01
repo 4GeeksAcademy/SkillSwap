@@ -4,7 +4,11 @@ import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
 import { Home } from "./pages/home";
-import { Demo } from "./pages/demo";
+import { SignUp } from "./pages/SignUp";
+import { UserCard } from "./pages/UserCard";
+import { PrivateSpace } from "./pages/PrivateSpace";
+import { Chat } from "./pages/Chat";
+import { About } from "./pages/About";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
@@ -23,14 +27,16 @@ const Layout = () => {
         <div>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
-                    <Navbar />
+                    
                     <Routes>
                         <Route element={<Home />} path="/" />
-                        <Route element={<Demo />} path="/demo" />
-                        <Route element={<Single />} path="/single/:theid" />
-                        <Route element={<h1>Not found!</h1>} />
+                        <Route path="/SignUp" element={<SignUp />} />
+                        <Route element={<UserCard />} path="/UserCard" />
+                        <Route element={<PrivateSpace />} path="/PrivateSpace" />
+                        <Route element={<Chat />} path="/Chat" />
+                        <Route element={<About />} path="/About" />
                     </Routes>
-                    <Footer />
+                   
                 </ScrollToTop>
             </BrowserRouter>
         </div>
