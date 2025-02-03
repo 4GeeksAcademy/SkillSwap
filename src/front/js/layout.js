@@ -3,7 +3,12 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
 
-import Home from "./pages/home";
+import { Home } from "./pages/home";
+import { SignUp } from "./pages/SignUp";
+import { UserCard } from "./pages/UserCard";
+import { PrivateSpace } from "./pages/PrivateSpace";
+import { Chat } from "./pages/Chat";
+import { About } from "./pages/About";
 import Login from "./pages/login";
 import Pricing from "./pages/pricing";
 import { Demo } from "./pages/demo";
@@ -26,16 +31,21 @@ const Layout = () => {
         <div>
             <BrowserRouter basename={basename}>
                 <ScrollToTop>
-                    <Navbar />
+                    
                     <Routes>
                         <Route element={<Home />} path="/" />
+                        <Route element={<SignUp />} path="/SignUp" />
+                        <Route element={<UserCard />} path="/UserCard" />
+                        <Route element={<PrivateSpace />} path="/PrivateSpace" />
+                        <Route element={<Chat />} path="/Chat" />
+                        <Route element={<About />} path="/About" />
                         <Route element={<Login />} path="/login" />
                         <Route element={<Demo />} path="/demo" />
                         <Route element={<Pricing />} path="/pricing" />
                         <Route element={<Single />} path="/single/:theid" />
                         <Route element={<h1>Not found!</h1>} />
                     </Routes>
-                    <Footer />
+                   
                 </ScrollToTop>
             </BrowserRouter>
         </div>
