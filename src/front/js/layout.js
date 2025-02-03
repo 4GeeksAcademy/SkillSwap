@@ -9,11 +9,15 @@ import { UserCard } from "./pages/UserCard";
 import { PrivateSpace } from "./pages/PrivateSpace";
 import { Chat } from "./pages/Chat";
 import { About } from "./pages/About";
+import Login from "./pages/login";
+import Pricing from "./pages/pricing";
+import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
-import { Navbar } from "./component/navbar";
-import { Footer } from "./component/footer";
+import  Navbar from "./component/navbar";
+import Footer  from "./component/footer";
+
 
 //create your first component
 const Layout = () => {
@@ -30,11 +34,16 @@ const Layout = () => {
                     
                     <Routes>
                         <Route element={<Home />} path="/" />
-                        <Route path="/SignUp" element={<SignUp />} />
+                        <Route element={<SignUp />} path="/SignUp" />
                         <Route element={<UserCard />} path="/UserCard" />
                         <Route element={<PrivateSpace />} path="/PrivateSpace" />
                         <Route element={<Chat />} path="/Chat" />
                         <Route element={<About />} path="/About" />
+                        <Route element={<Login />} path="/login" />
+                        <Route element={<Demo />} path="/demo" />
+                        <Route element={<Pricing />} path="/pricing" />
+                        <Route element={<Single />} path="/single/:theid" />
+                        <Route element={<h1>Not found!</h1>} />
                     </Routes>
                    
                 </ScrollToTop>
