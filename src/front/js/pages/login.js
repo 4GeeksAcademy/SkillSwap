@@ -11,8 +11,9 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("https://effective-goldfish-7vrjjp4gjw97fxpxj-3001.app.github.dev/", {
+            const response = await fetch(`${process.env.BACKEND_URL}/login`, {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },

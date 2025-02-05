@@ -53,7 +53,7 @@ def signup():
     response.set_cookie(
         'access_token',
         token,
-        httponly=True,
+        httponly=False,
         secure=True,
         samesite='None'
     )

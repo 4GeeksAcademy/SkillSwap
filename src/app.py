@@ -20,7 +20,7 @@ STATIC_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../publi
 # Initialize Flask app
 app = Flask(__name__)
 app.url_map.strict_slashes = False
-CORS(app, supports_credentials=True, origins=["http://localhost:3000"])
+CORS(app, supports_credentials=True, origins=["*"])
 
 # Database configuration
 db_url = os.getenv("DATABASE_URL")
