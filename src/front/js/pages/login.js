@@ -1,21 +1,36 @@
-import React, { useState, useContext } from "react"; 
+import React, { useState } from "react"; 
 import { useNavigate } from "react-router-dom"; 
-import { Context } from "../store/appContext"; 
 import "../../styles/login.css"; 
 
 const Login = () => { 
     const navigate = useNavigate(); 
-    const { actions } = useContext(Context); 
     const [username, setUsername] = useState(""); 
     const [password, setPassword] = useState("");
+    const [error, setError] = useState(""); 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await actions.login(username, password);
+            const response = await fetch("https://effective-goldfish-7vrjjp4gjw97fxpxj-3001.app.github.dev/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
+            });
+
+            if (!response.ok) {
+                // Handle error responses (e.g., 401 Unauthorized)
+                throw new Error("Login failed. Please check your username and password.");
+            }
+
+            const data = await response.json();
+            // Save token or user data as needed
+            localStorage.setItem("token", data.token); // Example of saving a token
             navigate("/private");
         } catch (error) {
-            console.error("Error logging in");
+            console.error("Error logging in:", error);
+            setError(error.message); // Set error message to state
         }
     };
 
@@ -26,6 +41,7 @@ const Login = () => {
                 <hr style={{ width: '100%', margin: '0 auto', borderColor: 'black' }} />
             </div>
             <form onSubmit={handleSubmit} className="container">
+                {error && <div className="alert alert-danger">{error}</div>} {/* Display error message */}
                 <div className="mb-3">
                     <label className="form-label label">Username</label>
                     <input

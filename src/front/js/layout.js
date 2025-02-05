@@ -2,6 +2,8 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScrollToTop from "./component/scrollToTop";
 import { BackendURL } from "./component/backendURL";
+import  Navbar from "./component/navbar";
+import Footer  from "./component/footer";
 
 import { Home } from "./pages/home";
 import { SignUp } from "./pages/SignUp";
@@ -15,8 +17,7 @@ import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
-import  Navbar from "./component/navbar";
-import Footer  from "./component/footer";
+
 
 
 //create your first component
@@ -30,6 +31,7 @@ const Layout = () => {
     return (
         <div>
             <BrowserRouter basename={basename}>
+            <Navbar />
                 <ScrollToTop>
                     
                     <Routes>
@@ -47,6 +49,7 @@ const Layout = () => {
                     </Routes>
                    
                 </ScrollToTop>
+                <Footer />
             </BrowserRouter>
         </div>
     );

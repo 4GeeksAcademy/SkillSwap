@@ -6,8 +6,8 @@ const Navbar = () => {
     return (
         <nav>
             <div>
-                <Link to="/mi-perfil">Mi Perfil</Link>
-                <Link to="/sobre-nosotros">Sobre Nosotros</Link>
+                <Link to="/privatespace">Mi Perfil</Link>
+                <Link to="/about">Sobre Nosotros</Link>
                 <Link to="/pricing">Nuestros planes</Link>
                 <Link to="/mas">Más</Link>
             </div>
@@ -15,7 +15,7 @@ const Navbar = () => {
                 <Link to="/login">
                     <button>Log-In</button>
                 </Link>
-                <Link to="/registrate">
+                <Link to="/signup">
                     <button>Registrate</button>
                 </Link>
             </div>
