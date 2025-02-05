@@ -4,7 +4,7 @@ import "../../styles/login.css";
 
 const Login = () => { 
     const navigate = useNavigate(); 
-    const [username, setUsername] = useState(""); 
+    const [email, setEmail] = useState(""); 
     const [password, setPassword] = useState("");
     const [error, setError] = useState(""); 
 
@@ -16,12 +16,12 @@ const Login = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ username, password }),
+                body: JSON.stringify({ email, password }),
             });
 
             if (!response.ok) {
                 // Handle error responses (e.g., 401 Unauthorized)
-                throw new Error("Login failed. Please check your username and password.");
+                throw new Error("Login failed. Please check your email and password.");
             }
 
             const data = await response.json();
@@ -43,13 +43,13 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="container">
                 {error && <div className="alert alert-danger">{error}</div>} {/* Display error message */}
                 <div className="mb-3">
-                    <label className="form-label label">Username</label>
+                    <label className="form-label label">Email</label>
                     <input
-                        type="text"
+                        type="email"
                         className="form-control input"
-                        placeholder="Enter your username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="Enter your email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                         required
                     />
                 </div>
