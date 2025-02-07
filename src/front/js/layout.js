@@ -33,22 +33,13 @@ const Layout = () => {
         <Navbar />
         <ScrollToTop>
           <Routes>
-            <Route
-              path="/pricing"
-              element={
-                <ProtectedRoute>
-                  <Pricing />
-                </ProtectedRoute>
-              }
-            />
             <Route element={<Home />} path="/" />
-            <Route element={<SignUp />} path="/SignUp" />
-            <Route element={<UserCard />} path="/UserCard" />
-            <Route element={<PrivateSpace />} path="/PrivateSpace" />
+            <Route element={<ProtectedRoute><SignUp /></ProtectedRoute>} path="/SignUp" />
+            <Route element={<UserCard />} path="/UserCard"/>
+            <Route element={ <PrivateSpace /> } path="/PrivateSpace" />
             <Route element={<Chat />} path="/Chat" />
             <Route element={<About />} path="/About" />
-            <Route element={<Login />} path="/login" />
-            <Route element={<Demo />} path="/demo" />
+            <Route element={<ProtectedRoute><Login /></ProtectedRoute>} path="/login" />
             <Route element={<Pricing />} path="/pricing" />
             <Route element={<Single />} path="/single/:theid" />
             <Route element={<h1>Not found!</h1>} />

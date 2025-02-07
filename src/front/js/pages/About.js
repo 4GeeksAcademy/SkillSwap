@@ -3,7 +3,7 @@ import React from "react";
 export const About = () => {
     return (
         <div className="container-fluid min-vh-100" style={{ backgroundColor: "#F5ECE5" }}>
-            <div className="container py-5">
+            <div className="container-fluid py-5">
                 {/* Sección de Encabezado */}
                 <div className="text-center">
                     <h1 className="fw-bold">About Skills & Swap</h1>
