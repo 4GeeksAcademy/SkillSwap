@@ -33,11 +33,11 @@ const Layout = () => {
         <Navbar />
         <ScrollToTop>
           <Routes>
-            <Route element={<Home />} path="/" />
+          <Route element={<Home />} path="/" />
             <Route element={<ProtectedRoute><SignUp /></ProtectedRoute>} path="/SignUp" />
-            <Route element={<UserCard />} path="/UserCard"/>
-            <Route element={ <PrivateSpace /> } path="/PrivateSpace" />
-            <Route element={<Chat />} path="/Chat" />
+            <Route element={<ProtectedRoute><UserCard /></ProtectedRoute>} path="/UserCard"/>
+            <Route element={<ProtectedRoute> <PrivateSpace /> </ProtectedRoute>} path="/PrivateSpace" />
+            <Route element={<ProtectedRoute><Chat /></ProtectedRoute>} path="/Chat" />
             <Route element={<About />} path="/About" />
             <Route element={<ProtectedRoute><Login /></ProtectedRoute>} path="/login" />
             <Route element={<Pricing />} path="/pricing" />
