@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import ScrollToTop from "./component/scrollToTop";
+import ScrollToTop from "./component/ScrollToTop";
 import { BackendURL } from "./component/backendURL";
-import Navbar from "./component/navbar";
-import Footer from "./component/footer";
+import Navbar from "./component/Navbar";
+import Footer from "./component/Footer";
 
-import { ProtectedRoute } from "./component/protectedRoute";
+import { ProtectedRoute } from "./component/ProtectedRoute";
 import { Home } from "./pages/home";
 import { SignUp } from "./pages/SignUp";
 import { UserCard } from "./pages/UserCard";

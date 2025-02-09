@@ -12,7 +12,6 @@ def signup():
     body = request.get_json()
 
     # Validación básica de los datos recibidos
-    # Se valida que se hayan enviado email, password, name y last_name
     if not body or not body.get('email') or not body.get('password') or not body.get('name') or not body.get('last_name'):
         return jsonify({"msg": "Email, password, name and last name are required"}), 400
 
@@ -29,7 +28,7 @@ def signup():
     # Genera el hash de la contraseña
     hashed_password = generate_password_hash(password)
 
-    # Crea y guarda el nuevo usuario, incluyendo name y last_name
+    # Crea y guarda el nuevo usuario
     new_user = User(
         name=name,
         last_name=last_name,
@@ -46,10 +45,7 @@ def signup():
         'exp': datetime.utcnow() + timedelta(days=1)
     }, current_app.config['JWT_SECRET_KEY'], algorithm="HS256")
 
-    # Dependiendo de la versión de PyJWT, es posible que 'token' sea un byte string;
-    # en ese caso, decodifícalo con: token = token.decode('utf-8')
-    # Genera la respuesta y establece el token en una cookie
-    response = make_response(jsonify({"msg": "User created"}))
+    response = make_response(jsonify({"success": True, "token": token, "msg": "User created"}))
     response.set_cookie(
         'access_token',
         token,
