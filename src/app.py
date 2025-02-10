@@ -12,6 +12,9 @@ from api.commands import setup_commands
 from api.routes.signup import signup_bp
 from api.routes.login import login_bp
 from api.routes.verify import verify_bp
+from api.routes.user import user_bp
+from api.routes.conversation import conversation_bp
+from api.routes.messages import messages_bp
 
 # Configuration
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
@@ -42,6 +45,10 @@ setup_commands(app)
 app.register_blueprint(signup_bp, url_prefix='/api')
 app.register_blueprint(login_bp, url_prefix='/api')
 app.register_blueprint(verify_bp, url_prefix='/api')
+app.register_blueprint(user_bp, url_prefix='/api')
+app.register_blueprint(conversation_bp, url_prefix='/api')
+app.register_blueprint(messages_bp, url_prefix='/api')
+
 
 # Error handling
 @app.errorhandler(APIException)
