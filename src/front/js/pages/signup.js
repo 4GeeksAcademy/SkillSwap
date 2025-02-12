@@ -40,7 +40,7 @@ export const SignUp = () => {
   };
 
   return (
-    <div className="container mt-5">
+    <div className="container-fluid mt-5">
       <div className="text-center mt-5">
         <h1>Regístrate</h1>
         <h3 className="text-secondary">
@@ -51,11 +51,11 @@ export const SignUp = () => {
             {error && <div className="alert alert-danger">{error}</div>}
             <div className="row mb-3">
                 <div className="col">
-                    <label htmlFor="nombre" className="form-label">Nombre</label>
+                    <label htmlFor="name" className="form-label">Nombre</label>
                     <input type="text" className="form-control border-danger" id="nombre" placeholder="Aaron" required value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
                 <div className="col">
-                    <label htmlFor="apellidos" className="form-label">Apellidos</label>
+                    <label htmlFor="last_name" className="form-label">Apellidos</label>
                     <input type="text" className="form-control border-danger" id="apellidos" placeholder="Barcos Caballero" required value={last_name} onChange={(e) => setLastname(e.target.value)} />
                 </div>
             </div>
@@ -69,7 +69,7 @@ export const SignUp = () => {
                     <input type="password" className="form-control" id="password" placeholder="****" required value={password} onChange={(e) => setPassword(e.target.value)} />
                 </div>
             </div>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-danger">
               Registrarse
             </button>
           </form>

@@ -7,14 +7,13 @@ import Footer from "./component/Footer";
 
 import { ProtectedRoute } from "./component/ProtectedRoute";
 import { Home } from "./pages/home";
-import { SignUp } from "./pages/SignUp";
-import { UserCard } from "./pages/UserCard";
-import { PrivateSpace } from "./pages/PrivateSpace";
-import { Chat } from "./pages/Chat";
-import { About } from "./pages/About";
+import { SignUp } from "./pages/signup";
+import { UserCard } from "./pages/usercard";
+import { PrivateSpace } from "./pages/feed";
+import { Chat } from "./pages/chat";
+import { About } from "./pages/about";
 import Login from "./pages/login";
 import Pricing from "./pages/pricing";
-import { Demo } from "./pages/demo";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 

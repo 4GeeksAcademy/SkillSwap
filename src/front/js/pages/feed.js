@@ -1,32 +1,26 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const PrivateSpace = () => {
     const navigate = useNavigate();
+    const [users, setUsers] = useState([]); // State to hold user data
 
-    const users = [
-        {
-            name: "Lucia Canalda",
-            image: "https://i.pinimg.com/736x/35/d4/a6/35d4a62fad980e8f5a410d3a6bc3f219.jpg",
-            tags: ["Aventura", "Healthy"],
-            description: "Mi pasión es el surf. Si quieres aprender a surfear yo estoy buscando aprender cocina asiática.",
-            date: "Sep 22, 2021"
-        },
-        {
-            name: "Aaron Barcos",
-            image: "https://i.pinimg.com/736x/8a/28/49/8a2849a63361dde038c098fa2827d2b4.jpg",
-            tags: ["Detallista", "Lectura"],
-            description: "Me paso horas leyendo novelas, me encantaría aprender japonés para poder leer mangas.",
-            date: "Jan 16, 2023"
-        },
-        {
-            name: "Alejandro Gil",
-            image: "https://i.pinimg.com/736x/cf/55/a3/cf55a38599b8bc9d88897970d32b02eb.jpg",
-            tags: ["Creativo", "Baile"],
-            description: "La música y el baile forman parte de mí, puedo dar clases de baile si alguien me ayuda a introducirme en programación.",
-            date: "Dec 20, 2024"
-        }
-    ];
+    useEffect(() => {
+        const fetchUsersWithSkills = async () => {
+            try {
+                const response = await fetch("/users/skills"); // Adjust the API endpoint as necessary
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setUsers(data); // Set the fetched data to state
+            } catch (error) {
+                console.error("Error fetching users:", error);
+            }
+        };
+
+        fetchUsersWithSkills(); // Call the fetch function
+    }, []); // Empty dependency array means this runs once when the component mounts
 
     const goToUserProfile = (user) => {
         navigate("/usercard", { state: user }); 
@@ -45,15 +39,15 @@ export const PrivateSpace = () => {
                             <div className="row mb-4" key={index}>
                                 <div className="col-md-4 text-center">
                                     <img
-                                        src={user.image}
+                                        src={user.image} // Ensure your user data has an image property
                                         alt="Perfil"
                                         className="img-fluid rounded-circle"
                                         style={{ cursor: "pointer" }}
                                         onClick={() => goToUserProfile(user)} 
                                     />
                                     <div className="mt-3">
-                                        {user.tags.map((tag, i) => (
-                                            <span key={i} className="badge bg-secondary me-1">{tag}</span>
+                                        {user.skills.map((skill, i) => ( // Change tags to skills
+                                            <span key={i} className="badge bg-secondary me-1">{skill.name}</span> // Adjust based on your skill data structure
                                         ))}
                                     </div>
                                 </div>
@@ -62,9 +56,9 @@ export const PrivateSpace = () => {
                                         <h3 className="fw-bold" style={{ cursor: "pointer" }} onClick={() => goToUserProfile(user)}>
                                             {user.name}
                                         </h3>
-                                        <p>{user.description}</p>
+                                        <p>{user.description}</p> {/* Ensure this is included in your user data */}
                                         <div className="text-center mt-5">
-                                            <p className="text-muted">{user.date}</p>
+                                            <p className="text-muted">{user.date}</p> {/* Ensure this is included in your user data */}
                                             <button className="btn btn-dark me-3 shadow" onClick={() => goToChat(user)}>Chatear</button>
                                         </div>
                                     </div>
