@@ -32,12 +32,34 @@ const Layout = () => {
         <Navbar />
         <ScrollToTop>
           <Routes>
-          <Route element={<Home />} path="/" />
-            <Route element={<SignUp />} path="/SignUp" />
-            <Route element={<ProtectedRoute><UserCard /></ProtectedRoute>} path="/UserCard/<int:user_id>"/>
-            <Route element={<ProtectedRoute> <PrivateSpace /> </ProtectedRoute>} path="/PrivateSpace" />
-            <Route element={<ProtectedRoute><Chat /></ProtectedRoute>} path="/Chat" />
+            <Route element={<Home />} path="/" />
+            <Route
+              element={
+                <ProtectedRoute>
+                  <UserCard />
+                </ProtectedRoute>
+              }
+              path="/UserCard"
+            />
+            <Route
+              element={
+                <ProtectedRoute>
+                  {" "}
+                  <PrivateSpace />{" "}
+                </ProtectedRoute>
+              }
+              path="/PrivateSpace"
+            />
+            <Route
+              element={
+                <ProtectedRoute>
+                  <Chat />
+                </ProtectedRoute>
+              }
+              path="/Chat"
+            />
             <Route element={<About />} path="/About" />
+            <Route element={<SignUp />} path="/SignUp" />
             <Route element={<Login />} path="/login" />
             <Route element={<Pricing />} path="/pricing" />
             <Route element={<Single />} path="/single/:theid" />

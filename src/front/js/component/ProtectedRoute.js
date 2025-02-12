@@ -8,6 +8,6 @@ export const ProtectedRoute = ({ children }) => {
   if (store.auth.isAuthenticated) {
     return children;
   } else {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login?redirect=true" />;
   }
 };
