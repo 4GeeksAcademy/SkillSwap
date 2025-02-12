@@ -8,7 +8,7 @@ const Footer = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 {/* Left Section - Logo and Year */}
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img src="path/to/logo.png" alt="Logo" style={{ height: '40px', marginRight: '10px' }} /> {/* Replace with actual logo path */}
+                    <img src="https://previews.dropbox.com/p/thumb/ACjmNKaFNlOlq8GujX0shm7o9uHqIU5UIfQxaQnf0afQhIkmqENzejMWe4YmLikydZqpcomPh1_kdQL44BrrouGLDXV2jzESI7m2Fihmfy12zxiB0IjXLzY5Uoye7fZOidevV0ZB4KZvvAHp1naLNoZhnSnJf3ueM1th9zrdWo7w1zvzkcK2Mmnrd3n0UdUdajPA-5875ieUcHznBHgR0h48EVtCYN0wLkQ7gU-xB6wz8zLRM4DyDGH6hy_j2vg7HTX9lrRv_TAtpSUzR2b7lisddyLchKp8eGCP5cdq5Anj-3IQCoCgFNONzZgHC6BFfVYP334DbZyUTRGmpK-JtILg/p.png?is_prewarmed=true" alt="Logo" style={{ height: '80px', marginRight: '10px' }} /> {/* Replace with actual logo path */}
                     <span style={{ fontSize: '14px' }}>2025</span>
                 </div>
 
