@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/navbar.css";
 import { Context } from "../store/appContext";
+import { LogoutButton } from "./LogoutButton";
 
 const Navbar = () => {
   const { store } = useContext(Context);
@@ -19,7 +20,7 @@ const Navbar = () => {
         <Link to="/pricing">Nuestros planes</Link>
         <Link to="/mas">Más</Link>
       </div>
-      {!store.auth.isAuthenticated && (
+      {!store.auth.isAuthenticated ? (
         <div>
           <Link to="/login">
             <button>Log-In</button>
@@ -27,6 +28,10 @@ const Navbar = () => {
           <Link to="/signup">
             <button>Registrate</button>
           </Link>
+        </div>
+      ) : (
+        <div>
+          <LogoutButton />
         </div>
       )}
     </nav>

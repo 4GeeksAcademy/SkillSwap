@@ -48,15 +48,95 @@ const getState = ({ getStore, getActions, setStore }) => {
         }
       },
 
-      // Acción para cerrar sesión y limpiar el estado de autenticación
-      logout: () => {
-        setStore({
-          auth: {
-            token: null,
-            isAuthenticated: false,
-            user: null,
-          },
-        });
+      signup: async (name, last_name, email, password) => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}/signup`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ name, last_name, email, password }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg || "Sign up failed. Please check your input.");
+          }
+
+          const data = await response.json();
+          console.log("Signup successful:", data);
+
+          setStore({
+            auth: {
+              token: data.token,
+              isAuthenticated: true,
+              user: data.user,
+            },
+          });
+
+          return data;
+
+        } catch (error) {
+          console.error("Error signing up:", error);
+        }
+      },
+
+      login : async (email, password) => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}/login`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({ email, password }),
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.msg || "Login failed. Please check your input.");
+          }
+
+          const data = await response.json();
+          console.log("Login successful:", data);
+
+          setStore({
+            auth: {
+              token: data.token,
+              isAuthenticated: true,
+              user: data.user,
+            },
+          });
+
+          return data;
+        } catch (error) {
+          console.error("Error logging in:", error);
+        }
+      },
+
+      logout: async () => {
+        try {
+          const response = await fetch(`${process.env.BACKEND_URL}/logout`, {
+            method: "POST",
+            credentials: "include",
+          });
+
+          if (response.ok) {
+            console.log("Logout successful");
+            setStore({
+              auth: {
+                token: null,
+                isAuthenticated: false,
+                user: null,
+              },
+            });
+          } else {
+            console.error("Error logging out");
+          }
+        } catch (error) {
+          console.error("Error on logout:", error);
+        }
       },
     },
   };

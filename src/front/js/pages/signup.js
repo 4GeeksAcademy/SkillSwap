@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import { Context } from "../store/appContext";
 
 export const SignUp = () => {
+  const { actions } = useContext(Context);
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [last_name, setLastname] = useState("");
@@ -11,31 +13,11 @@ export const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch(
-        `${process.env.BACKEND_URL}/signup`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({ name, last_name, email, password }),
-        }
-      );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.msg || "Sign up failed. Please check your input.");
-      }
-
-      const data = await response.json();
-      console.log("Signup successful:", data);
-
+    const data = await actions.signup(name, last_name, email, password);
+    if (data) {
       navigate("/");
-    } catch (error) {
-      console.error("Error signing up:", error);
-      setError(error.message);
+    } else {
+      setError("Error al registrarse");
     }
   };
 
