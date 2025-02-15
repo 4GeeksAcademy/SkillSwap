@@ -44,10 +44,10 @@ const Layout = () => {
             />
             <Route
               element={
-                <ProtectedRoute>
+                
                   
                   <Feed />
-                </ProtectedRoute>
+                
               }
               path="/feed"
             />

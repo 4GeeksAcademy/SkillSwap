@@ -16,8 +16,8 @@ def signup():
 
     name = body.get('name')
     last_name = body.get('last_name')
-    email = body['email']
-    password = body['password']
+    email = body.get('email')
+    password = body.get('password')
 
     existing_user = User.query.filter_by(email=email).first()
     if existing_user:
