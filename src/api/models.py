@@ -85,9 +85,9 @@ class Skill(db.Model):
         return {
             "id": self.id,
             "user_id": self.user_id,
-            "skill_type": self.skill_type,
-            "skill_category": self.skill_category,
-            "skill_subcategory": self.skill_subcategory
+            "skill_type": self.skill_type.value,
+            "skill_category": self.skill_category.value,
+            "skill_subcategory": self.skill_subcategory.value 
         }
 
 

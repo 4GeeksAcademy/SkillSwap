@@ -9,7 +9,7 @@ import { ProtectedRoute } from "./component/ProtectedRoute";
 import { Home } from "./pages/home";
 import { SignUp } from "./pages/signup";
 import { UserCard } from "./pages/usercard";
-import { PrivateSpace } from "./pages/feed";
+import { MyAccount } from "./pages/my-account";
 import { Chat } from "./pages/chat";
 import { About } from "./pages/about";
 import Login from "./pages/login";
@@ -44,11 +44,10 @@ const Layout = () => {
             <Route
               element={
                 <ProtectedRoute>
-                  {" "}
-                  <PrivateSpace />{" "}
+                  <MyAccount />
                 </ProtectedRoute>
               }
-              path="/PrivateSpace"
+              path="/my-account"
             />
             <Route
               element={

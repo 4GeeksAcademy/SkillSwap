@@ -9,8 +9,7 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
     },
     actions: {
-      // Acción para validar el token de autenticación
-      validateToken: async (token) => {
+      verifyToken: async (token) => {
         try {
           const resp = await fetch(`${process.env.BACKEND_URL}/verify`, {
             method: "GET",

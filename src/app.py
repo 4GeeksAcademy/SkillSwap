@@ -15,6 +15,7 @@ from api.routes.verify import verify_bp
 from api.routes.user import user_bp
 from api.routes.conversation import conversation_bp
 from api.routes.messages import messages_bp
+from api.routes.skill import skills_bp
 from api.routes.feed import feed_bp
 from api.routes.logout import logout_bp
 
@@ -49,6 +50,7 @@ app.register_blueprint(login_bp, url_prefix='/api')
 app.register_blueprint(logout_bp, url_prefix='/api')
 app.register_blueprint(verify_bp, url_prefix='/api')
 app.register_blueprint(user_bp, url_prefix='/api')
+app.register_blueprint(skills_bp, url_prefix='/api')
 app.register_blueprint(conversation_bp, url_prefix='/api')
 app.register_blueprint(messages_bp, url_prefix='/api')
 app.register_blueprint(feed_bp, url_prefix='/api')
