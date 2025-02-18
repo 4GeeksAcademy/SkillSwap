@@ -14,7 +14,6 @@ import { Chat } from "./pages/chat";
 import { About } from "./pages/about";
 import Login from "./pages/login";
 import Pricing from "./pages/pricing";
-import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
 //create your first component
@@ -61,7 +60,6 @@ const Layout = () => {
             <Route element={<SignUp />} path="/SignUp" />
             <Route element={<Login />} path="/login" />
             <Route element={<Pricing />} path="/pricing" />
-            <Route element={<Single />} path="/single/:theid" />
             <Route element={<h1>Not found!</h1>} />
           </Routes>
         </ScrollToTop>
