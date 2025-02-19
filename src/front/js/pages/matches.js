@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { Tab, Nav } from "react-bootstrap";
-import { Context } from "../store/appContext";
 
 export const Matches = () => {
     const { store } = useContext(Context);
