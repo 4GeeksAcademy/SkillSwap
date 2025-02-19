@@ -57,7 +57,7 @@ export const MyAccount = () => {
   ];
 
   useEffect(() => {
-    fetch(`${process.env.BACKEND_URL}/users/${store.auth.user.id}`)
+    fetch(`${process.env.BACKEND_URL}/api/users/${store.auth.user.id}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Error al obtener la información del usuario");
@@ -152,7 +152,7 @@ export const MyAccount = () => {
   const updateSkill = async (skillData, skillType) => {
     if (skillData.id) {
       const res = await fetch(
-        `${process.env.BACKEND_URL}/skills/${skillData.id}`,
+        `${process.env.BACKEND_URL}/api/skills/${skillData.id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -167,7 +167,7 @@ export const MyAccount = () => {
       }
       return await res.json();
     } else {
-      const res = await fetch(`${process.env.BACKEND_URL}/skills`, {
+      const res = await fetch(`${process.env.BACKEND_URL}/api/skills`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -188,7 +188,7 @@ export const MyAccount = () => {
     e.preventDefault();
     try {
       const res = await fetch(
-        `${process.env.BACKEND_URL}/users/${store.auth.user.id}`,
+        `${process.env.BACKEND_URL}/api/users/${store.auth.user.id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

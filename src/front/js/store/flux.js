@@ -1,7 +1,6 @@
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
-      message: null,
       auth: {
         token: null,
         isAuthenticated: false,
@@ -11,7 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
     actions: {
       verifyToken: async (token) => {
         try {
-          const resp = await fetch(`${process.env.BACKEND_URL}/verify`, {
+          const resp = await fetch(`${process.env.BACKEND_URL}/api/verify`, {
             method: "GET",
             credentials: "include",
           });

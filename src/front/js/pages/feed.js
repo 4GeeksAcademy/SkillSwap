@@ -1,30 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
 
 export const Feed = () => {
+    const { store } = useContext(Context);
     const navigate = useNavigate();
     const [users, setUsers] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null); // Usuario logueado
 
     useEffect(() => {
-        // Obtener el usuario autenticado desde localStorage (puede cambiarse si usas contexto global)
-        const loggedUser = JSON.parse(localStorage.getItem("currentUser")); 
-        if (loggedUser) {
-            setCurrentUser(loggedUser);
-        }
-
+        if (!store?.auth?.user?.id) return;
         const fetchUsersWithSkills = async () => {
             try {
-                const response = await fetch("https://shiny-tribble-v6gjwv44p9r43rp6-3001.app.github.dev/api/users");
+                const response = await fetch(`${process.env.BACKEND_URL}/api/feed/${store.auth.user.id}`);
                 if (!response.ok) {
                     throw new Error("Error al obtener usuarios");
                 }
                 let data = await response.json();
-
-                // Filtrar usuarios para excluir el usuario logueado
-                if (loggedUser) {
-                    data = data.filter(user => user.id !== loggedUser.id);
-                }
 
                 setUsers(data);
             } catch (error) {
@@ -33,7 +24,7 @@ export const Feed = () => {
         };
 
         fetchUsersWithSkills();
-    }, []);
+    }, [store?.auth?.user?.id]);
 
     const goToUserProfile = (user) => {
         navigate(`/user/${user.id}`);
@@ -43,12 +34,15 @@ export const Feed = () => {
         navigate("/chat", { state: user });
     };
 
-    const handleMatch = async (userId) => {
+    const requestMatch = async (userId) => {
         try {
-            const response = await fetch(`https://shiny-tribble-v6gjwv44p9r43rp6-3001.app.github.dev/api/match/${userId}`, {
+            const response = await fetch(`${process.env.BACKEND_URL}/api/match-requests`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ requesterId: currentUser.id }) // Enviar el ID del usuario autenticado
+                body: JSON.stringify({
+                    sender_id: store.auth.user.id,
+                    receiver_id: userId
+                 })
             });
 
             if (!response.ok) throw new Error("Error al enviar la solicitud de match");
@@ -104,7 +98,7 @@ export const Feed = () => {
                                             ) : (
                                                 <button
                                                     className={`btn shadow ${user.matchStatus === "pending" ? "btn-secondary" : "btn-success"}`}
-                                                    onClick={() => handleMatch(user.id)}
+                                                    onClick={() => requestMatch(user.id)}
                                                     disabled={user.matchStatus === "pending"}
                                                 >
                                                     {user.matchStatus === "pending" ? "Solicitud Enviada" : "Hacer Match 💚"}
