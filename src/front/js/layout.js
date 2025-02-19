@@ -17,6 +17,7 @@ import Pricing from "./pages/pricing";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 import { UserProfile } from "./pages/userprofile";
+import { Matches } from "./pages/matches";
 
 //create your first component
 const Layout = () => {
@@ -45,9 +46,9 @@ const Layout = () => {
             <Route
               element={
                 
-                  
-                  <Feed />
                 
+                  <Feed />
+                  
               }
               path="/feed"
             />
@@ -60,6 +61,7 @@ const Layout = () => {
               path="/Chat"
             />
             <Route element={<UserProfile />} path="/user/:id" />
+            <Route element={<Matches />} path="/Matches" />
             <Route element={<About />} path="/About" />
             <Route element={<SignUp />} path="/SignUp" />
             <Route element={<Login />} path="/login" />

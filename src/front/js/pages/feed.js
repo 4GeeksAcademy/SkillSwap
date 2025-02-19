@@ -3,31 +3,64 @@ import { useNavigate } from "react-router-dom";
 
 export const Feed = () => {
     const navigate = useNavigate();
-    const [users, setUsers] = useState([]); // State to hold user data
+    const [users, setUsers] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null); // Usuario logueado
 
     useEffect(() => {
+        // Obtener el usuario autenticado desde localStorage (puede cambiarse si usas contexto global)
+        const loggedUser = JSON.parse(localStorage.getItem("currentUser")); 
+        if (loggedUser) {
+            setCurrentUser(loggedUser);
+        }
+
         const fetchUsersWithSkills = async () => {
             try {
-                const response = await fetch("/users/skills"); // Adjust the API endpoint as necessary
+                const response = await fetch("https://shiny-tribble-v6gjwv44p9r43rp6-3001.app.github.dev/api/users");
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    throw new Error("Error al obtener usuarios");
                 }
-                const data = await response.json();
-                setUsers(data); // Set the fetched data to state
+                let data = await response.json();
+
+                // Filtrar usuarios para excluir el usuario logueado
+                if (loggedUser) {
+                    data = data.filter(user => user.id !== loggedUser.id);
+                }
+
+                setUsers(data);
             } catch (error) {
                 console.error("Error fetching users:", error);
             }
         };
 
-        fetchUsersWithSkills(); // Call the fetch function
-    }, []); // Empty dependency array means this runs once when the component mounts
+        fetchUsersWithSkills();
+    }, []);
 
     const goToUserProfile = (user) => {
-        navigate("/usercard", { state: user }); 
+        navigate(`/user/${user.id}`);
     };
 
     const goToChat = (user) => {
-        navigate("/chat", { state: user }); 
+        navigate("/chat", { state: user });
+    };
+
+    const handleMatch = async (userId) => {
+        try {
+            const response = await fetch(`https://shiny-tribble-v6gjwv44p9r43rp6-3001.app.github.dev/api/match/${userId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ requesterId: currentUser.id }) // Enviar el ID del usuario autenticado
+            });
+
+            if (!response.ok) throw new Error("Error al enviar la solicitud de match");
+
+            setUsers((prevUsers) =>
+                prevUsers.map((user) =>
+                    user.id === userId ? { ...user, matchStatus: "pending" } : user
+                )
+            );
+        } catch (error) {
+            console.error("Error al hacer match:", error);
+        }
     };
 
     return (
@@ -39,16 +72,22 @@ export const Feed = () => {
                             <div className="row mb-4" key={index}>
                                 <div className="col-md-4 text-center">
                                     <img
-                                        src={user.image} // Ensure your user data has an image property
+                                        src={user.image || "https://archive.org/download/placeholder-image/placeholder-image.jpg"}
                                         alt="Perfil"
                                         className="img-fluid rounded-circle"
-                                        style={{ cursor: "pointer" }}
-                                        onClick={() => goToUserProfile(user)} 
+                                        style={{ cursor: "pointer", width: "150px", height: "150px", objectFit: "cover" }}
+                                        onClick={() => goToUserProfile(user)}
                                     />
                                     <div className="mt-3">
-                                        {user.skills.map((skill, i) => ( // Change tags to skills
-                                            <span key={i} className="badge bg-secondary me-1">{skill.name}</span> // Adjust based on your skill data structure
-                                        ))}
+                                        {user.skills && user.skills.length > 0 ? (
+                                            user.skills.map((skill, i) => (
+                                                <span key={i} className="badge bg-secondary me-1">
+                                                    {skill.name}
+                                                </span>
+                                            ))
+                                        ) : (
+                                            <span className="badge bg-warning">Sin habilidades registradas</span>
+                                        )}
                                     </div>
                                 </div>
                                 <div className="col-md-8">
@@ -56,15 +95,27 @@ export const Feed = () => {
                                         <h3 className="fw-bold" style={{ cursor: "pointer" }} onClick={() => goToUserProfile(user)}>
                                             {user.name}
                                         </h3>
-                                        <p>{user.description}</p> {/* Ensure this is included in your user data */}
+                                        <p>{user.description || "No hay descripción disponible"}</p>
                                         <div className="text-center mt-5">
-                                            <p className="text-muted">{user.date}</p> {/* Ensure this is included in your user data */}
-                                            <button className="btn btn-dark me-3 shadow" onClick={() => goToChat(user)}>Chatear</button>
+                                            <p className="text-muted">{user.date || "Fecha no disponible"}</p>
+
+                                            {user.matchStatus === "matched" ? (
+                                                <button className="btn btn-dark shadow" onClick={() => goToChat(user)}>Chatear</button>
+                                            ) : (
+                                                <button
+                                                    className={`btn shadow ${user.matchStatus === "pending" ? "btn-secondary" : "btn-success"}`}
+                                                    onClick={() => handleMatch(user.id)}
+                                                    disabled={user.matchStatus === "pending"}
+                                                >
+                                                    {user.matchStatus === "pending" ? "Solicitud Enviada" : "Hacer Match 💚"}
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         ))}
+                        {users.length === 0 && <p className="text-center">No hay usuarios disponibles</p>}
                     </div>
                 </div>
             </div>

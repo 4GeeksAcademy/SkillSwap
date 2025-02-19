@@ -18,7 +18,7 @@ export const UserCard = () => {
                     <div className="card p-3 w-100" style={{ backgroundColor: "#FBECE5" }}>
                         <div className="row">
                             <div className="col-md-4 text-center">
-                                <img src={user?.image} alt="Perfil" className="img-fluid rounded-circle" />
+                                <img src={user.image || "https://archive.org/download/placeholder-image/placeholder-image.jpg"}  alt="Perfil" className="img-fluid rounded-circle" />
                                 <div className="mt-3">
                                     {user?.tags?.map((tag, i) => (
                                         <span key={i} className="badge bg-secondary me-1">{tag}</span>
