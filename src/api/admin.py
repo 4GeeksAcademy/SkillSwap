@@ -6,13 +6,11 @@ from wtforms_sqlalchemy.fields import QuerySelectField
 from werkzeug.security import generate_password_hash
 from .models import db, User, Skill, Match, Message, Conversation, Videocall, MatchRequest
 
-# Configurar Flask-Admin
 def setup_admin(app):
     app.secret_key = os.environ.get('FLASK_APP_KEY', 'sample key')
     app.config['FLASK_ADMIN_SWATCH'] = 'cerulean'
     admin = Admin(app, name='4Geeks Admin', template_mode='bootstrap3')
 
-    # Custom ModelView para usar selects en claves foráneas
     class UserAdmin(ModelView):
         column_searchable_list = ('name', 'last_name', 'email')
         column_filters = ('is_active',)
@@ -129,7 +127,6 @@ def setup_admin(app):
             }
         }
 
-    # Agregar modelos a Flask-Admin
     admin.add_view(UserAdmin(User, db.session))
     admin.add_view(SkillAdmin(Skill, db.session))
     admin.add_view(MatchAdmin(Match, db.session))
