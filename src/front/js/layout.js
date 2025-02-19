@@ -10,6 +10,7 @@ import { Home } from "./pages/home";
 import { SignUp } from "./pages/signup";
 import { UserCard } from "./pages/usercard";
 import { MyAccount } from "./pages/my-account";
+import { Feed } from "./pages/feed";
 import { Chat } from "./pages/chat";
 import { About } from "./pages/about";
 import Login from "./pages/login";
@@ -34,6 +35,7 @@ const Layout = () => {
         <ScrollToTop>
           <Routes>
             <Route element={<Home />} path="/" />
+            <Route element={<Feed />} path="/feed" />
             <Route
               element={
                 <ProtectedRoute>
