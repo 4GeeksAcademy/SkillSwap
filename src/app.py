@@ -1,72 +1,87 @@
 """
-This module takes care of starting the API Server, Loading the DB and Adding the endpoints
+This module starts the API Server, loads the DB, and adds endpoints.
 """
 import os
-from flask import Flask, request, jsonify, url_for, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from flask_migrate import Migrate
-from flask_swagger import swagger
 from api.utils import APIException, generate_sitemap
 from api.models import db
-from api.routes import api
 from api.admin import setup_admin
 from api.commands import setup_commands
+from api.routes.signup import signup_bp
+from api.routes.login import login_bp
+from api.routes.verify import verify_bp
+from api.routes.user import user_bp
+from api.routes.conversation import conversation_bp
+from api.routes.messages import messages_bp
+from api.routes.skill import skills_bp
+from api.routes.feed import feed_bp
+from api.routes.logout import logout_bp
+from api.routes.match import matches_bp
+from api.routes.match_request import match_requests_bp
+from api import models
 
-# from models import Person
-
+# Configuration
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"
-static_file_dir = os.path.join(os.path.dirname(
-    os.path.realpath(__file__)), '../public/')
+STATIC_DIR = os.path.join(os.path.dirname(os.path.realpath(__file__)), '../public/')
+
+# Initialize Flask app
 app = Flask(__name__)
 app.url_map.strict_slashes = False
+CORS(app, supports_credentials=True, origins=["*"])
 
-# database condiguration
+# Database configuration
 db_url = os.getenv("DATABASE_URL")
-if db_url is not None:
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace(
-        "postgres://", "postgresql://")
-else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////tmp/test.db"
-
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url.replace("postgres://", "postgresql://") if db_url else "sqlite:////tmp/test.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-MIGRATE = Migrate(app, db, compare_type=True)
+
+# JWT configuration
+app.config['JWT_SECRET_KEY'] = "mi-clave-super-secreta"
+
+# Initialize database and migrations
 db.init_app(app)
+MIGRATE = Migrate(app, db, compare_type=True)
 
-# add the admin
+# Setup admin and commands
 setup_admin(app)
-
-# add the admin
 setup_commands(app)
 
-# Add all endpoints form the API with a "api" prefix
-app.register_blueprint(api, url_prefix='/api')
+# Register Blueprints
+app.register_blueprint(signup_bp, url_prefix='/api')
+app.register_blueprint(login_bp, url_prefix='/api')
+app.register_blueprint(logout_bp, url_prefix='/api')
+app.register_blueprint(verify_bp, url_prefix='/api')
+app.register_blueprint(user_bp, url_prefix='/api')
+app.register_blueprint(skills_bp, url_prefix='/api')
+app.register_blueprint(conversation_bp, url_prefix='/api')
+app.register_blueprint(messages_bp, url_prefix='/api')
+app.register_blueprint(feed_bp, url_prefix='/api')
+app.register_blueprint(matches_bp, url_prefix='/api')
+app.register_blueprint(match_requests_bp, url_prefix='/api')
 
-# Handle/serialize errors like a JSON object
 
-
+# Error handling
 @app.errorhandler(APIException)
 def handle_invalid_usage(error):
     return jsonify(error.to_dict()), error.status_code
 
-# generate sitemap with all your endpoints
-
-
+# Generate sitemap
 @app.route('/')
 def sitemap():
-    if ENV == "development":
-        return generate_sitemap(app)
-    return send_from_directory(static_file_dir, 'index.html')
+    return generate_sitemap(app) if ENV == "development" else send_from_directory(STATIC_DIR, 'index.html')
 
-# any other endpoint will try to serve it like a static file
+# Serve static files
 @app.route('/<path:path>', methods=['GET'])
-def serve_any_other_file(path):
-    if not os.path.isfile(os.path.join(static_file_dir, path)):
+def serve_static_file(path):
+    file_path = os.path.join(STATIC_DIR, path)
+    if not os.path.isfile(file_path):
         path = 'index.html'
-    response = send_from_directory(static_file_dir, path)
-    response.cache_control.max_age = 0  # avoid cache memory
+    response = send_from_directory(STATIC_DIR, path)
+    response.cache_control.max_age = 0  # Avoid cache
     return response
 
-
-# this only runs if `$ python src/main.py` is executed
+# Run the app
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3001))
     app.run(host='0.0.0.0', port=PORT, debug=True)
