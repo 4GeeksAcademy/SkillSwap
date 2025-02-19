@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 export const Feed = () => {
     const { store } = useContext(Context);
     const navigate = useNavigate();
-    const [users, setUsers] = useState([]);
+    const [feeddata, setFeeddata] = useState([]);
 
     useEffect(() => {
         if (!store?.auth?.user?.id) return;
@@ -17,7 +17,7 @@ export const Feed = () => {
                 }
                 let data = await response.json();
 
-                setUsers(data);
+                setFeeddata(data);
             } catch (error) {
                 console.error("Error fetching users:", error);
             }
@@ -40,16 +40,16 @@ export const Feed = () => {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    sender_id: store.auth.user.id,
-                    receiver_id: userId
+                    sender_user_id: store.auth.user.id,
+                    receiver_user_id: userId
                  })
             });
 
             if (!response.ok) throw new Error("Error al enviar la solicitud de match");
 
-            setUsers((prevUsers) =>
-                prevUsers.map((user) =>
-                    user.id === userId ? { ...user, matchStatus: "pending" } : user
+            setFeeddata((prevData) =>
+                prevData.map((data) =>
+                    data.user.id === userId ? { ...data, match_status: "pending" } : data
                 )
             );
         } catch (error) {
@@ -62,19 +62,19 @@ export const Feed = () => {
             <div className="row justify-content-center">
                 <div className="col-md-10">
                     <div className="card p-4 w-100" style={{ backgroundColor: "#FBECE5" }}>
-                        {users.map((user, index) => (
+                        {feeddata.map((data, index) => (
                             <div className="row mb-4" key={index}>
                                 <div className="col-md-4 text-center">
                                     <img
-                                        src={user.image || "https://archive.org/download/placeholder-image/placeholder-image.jpg"}
+                                        src={data.user.image || "https://archive.org/download/placeholder-image/placeholder-image.jpg"}
                                         alt="Perfil"
                                         className="img-fluid rounded-circle"
                                         style={{ cursor: "pointer", width: "150px", height: "150px", objectFit: "cover" }}
-                                        onClick={() => goToUserProfile(user)}
+                                        onClick={() => goToUserProfile(data.user)}
                                     />
                                     <div className="mt-3">
-                                        {user.skills && user.skills.length > 0 ? (
-                                            user.skills.map((skill, i) => (
+                                        {data.user.skills && data.user.skills.length > 0 ? (
+                                            data.user.skills.map((skill, i) => (
                                                 <span key={i} className="badge bg-secondary me-1">
                                                     {skill.name}
                                                 </span>
@@ -86,22 +86,22 @@ export const Feed = () => {
                                 </div>
                                 <div className="col-md-8">
                                     <div className="card-body">
-                                        <h3 className="fw-bold" style={{ cursor: "pointer" }} onClick={() => goToUserProfile(user)}>
-                                            {user.name}
+                                        <h3 className="fw-bold" style={{ cursor: "pointer" }} onClick={() => goToUserProfile(data.user)}>
+                                            {data.user.name}
                                         </h3>
-                                        <p>{user.description || "No hay descripción disponible"}</p>
+                                        <p>{data.user.description || "No hay descripción disponible"}</p>
                                         <div className="text-center mt-5">
-                                            <p className="text-muted">{user.date || "Fecha no disponible"}</p>
+                                            <p className="text-muted">{data.user.date || "Fecha no disponible"}</p>
 
-                                            {user.matchStatus === "matched" ? (
-                                                <button className="btn btn-dark shadow" onClick={() => goToChat(user)}>Chatear</button>
+                                            {data.match_status === "matched" ? (
+                                                <button className="btn btn-dark shadow" onClick={() => goToChat(data.user)}>Chatear</button>
                                             ) : (
                                                 <button
-                                                    className={`btn shadow ${user.matchStatus === "pending" ? "btn-secondary" : "btn-success"}`}
-                                                    onClick={() => requestMatch(user.id)}
-                                                    disabled={user.matchStatus === "pending"}
+                                                    className={`btn shadow ${data.match_status === "pending" ? "btn-secondary" : "btn-success"}`}
+                                                    onClick={() => requestMatch(data.user.id)}
+                                                    disabled={data.match_status === "pending"}
                                                 >
-                                                    {user.matchStatus === "pending" ? "Solicitud Enviada" : "Hacer Match 💚"}
+                                                    {data.match_status === "pending" ? "Solicitud Enviada" : "Hacer Match 💚"}
                                                 </button>
                                             )}
                                         </div>
@@ -109,7 +109,7 @@ export const Feed = () => {
                                 </div>
                             </div>
                         ))}
-                        {users.length === 0 && <p className="text-center">No hay usuarios disponibles</p>}
+                        {feeddata.length === 0 && <p className="text-center">No hay usuarios disponibles</p>}
                     </div>
                 </div>
             </div>

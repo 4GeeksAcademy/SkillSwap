@@ -1,6 +1,5 @@
 from flask import Blueprint, jsonify, request
-
-from api.models import db, User, Skill, Match, Conversation
+from api.models import db, User, Skill, Match, MatchRequest, Conversation
 
 feed_bp = Blueprint('feed_bp', __name__)
 
@@ -14,10 +13,22 @@ def get_feed(user_id):
         skills = Skill.query.filter_by(user_id=user.id).all()
         skills_data = [skill.serialize() for skill in skills]
         
-        is_matched = Match.query.filter(
+        match = Match.query.filter(
             ((Match.user_1_id == user_id) & (Match.user_2_id == user.id)) |
             ((Match.user_1_id == user.id) & (Match.user_2_id == user_id))
-        ).first() is not None
+        ).first()
+        
+        if match:
+            match_status = "matched"
+        else:
+            match_request = MatchRequest.query.filter(
+                ((MatchRequest.sender_user_id == user_id) & (MatchRequest.receiver_user_id == user.id)) |
+                ((MatchRequest.sender_user_id == user.id) & (MatchRequest.receiver_user_id == user_id))
+            ).first()
+            if match_request:
+                match_status = "pending"
+            else:
+                match_status = "idle"
         
         conversation = Conversation.query.filter(
             ((Conversation.user_1_id == user_id) & (Conversation.user_2_id == user.id)) |
@@ -29,7 +40,7 @@ def get_feed(user_id):
         feed.append({
             "user": user_data,
             "skills": skills_data,
-            "is_matched": is_matched,
+            "match_status": match_status,
             "conversation": conversation_id
         })
     

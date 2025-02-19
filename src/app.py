@@ -18,6 +18,7 @@ from api.routes.messages import messages_bp
 from api.routes.skill import skills_bp
 from api.routes.feed import feed_bp
 from api.routes.logout import logout_bp
+from api.routes.match_request import match_requests_bp
 from api import models
 
 # Configuration
@@ -55,6 +56,7 @@ app.register_blueprint(skills_bp, url_prefix='/api')
 app.register_blueprint(conversation_bp, url_prefix='/api')
 app.register_blueprint(messages_bp, url_prefix='/api')
 app.register_blueprint(feed_bp, url_prefix='/api')
+app.register_blueprint(match_requests_bp, url_prefix='/api')
 
 
 # Error handling

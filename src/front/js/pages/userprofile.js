@@ -10,7 +10,7 @@ export const UserProfile = () => {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch(`https://shiny-tribble-v6gjwv44p9r43rp6-3001.app.github.dev//api/users/${id}`); 
+                const response = await fetch(`${process.env.BACKEND_URL}/api/users/${id}`); 
                 if (!response.ok) throw new Error("Usuario no encontrado");
 
                 const data = await response.json();
