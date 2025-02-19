@@ -16,10 +16,10 @@ const Navbar = () => {
       </div>
       <div>
         <Link to="/feed">Feed</Link>
+        {store.auth.isAuthenticated && <Link to="/my-account">Mi Perfil</Link>}
+        {store.auth.isAuthenticated && <Link to="/matches">Matches</Link>}
         <Link to="/about">Sobre Nosotros</Link>
         <Link to="/pricing">Nuestros planes</Link>
-        {store.auth.isAuthenticated && <Link to="/my-account">Mi Perfil</Link>}
-        <Link to="/mas">Más</Link>
       </div>
       <div>
         {!store.auth.isAuthenticated ? (

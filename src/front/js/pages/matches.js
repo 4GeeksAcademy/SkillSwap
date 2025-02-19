@@ -1,22 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tab, Nav } from "react-bootstrap";
+import { Context } from "../store/appContext";
 
 export const Matches = () => {
+    const { store } = useContext(Context);
     const navigate = useNavigate();
-    const [friends, setFriends] = useState([]);
-    const [requests, setRequests] = useState([]);
-    const [currentUser, setCurrentUser] = useState(null);
+    const [friends, setFriends] = useState([]);  
+    const [requests, setRequests] = useState([]); 
 
     useEffect(() => {
-        const loggedUser = JSON.parse(localStorage.getItem("currentUser"));
-        if (loggedUser) {
-            setCurrentUser(loggedUser);
-        }
+        if (!store?.auth?.user?.id) return;
 
         const fetchMatches = async () => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/matches/${loggedUser.id}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/matches/${store.auth.user.id}`);
                 if (!response.ok) throw new Error("Error al obtener matches");
                 const data = await response.json();
                 setFriends(data);
@@ -27,7 +25,7 @@ export const Matches = () => {
 
         const fetchRequests = async () => {
             try {
-                const response = await fetch(`${process.env.BACKEND_URL}/api/match-requests/${loggedUser.id}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/match-requests/${store.auth.user.id}`);
                 if (!response.ok) throw new Error("Error al obtener solicitudes");
                 const data = await response.json();
                 setRequests(data);
@@ -36,18 +34,34 @@ export const Matches = () => {
             }
         };
 
-        if (loggedUser) {
-            fetchMatches();
-            fetchRequests();
+        fetchMatches();
+        fetchRequests();
+    }, [store?.auth?.user?.id]);
+
+    const acceptRequest = async (userId) => {
+        try {
+            const response = await fetch(`${process.env.BACKEND_URL}/api/match-requests/accept/${userId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ receiver_user_id: store.auth.user.id }),
+            });
+
+            if (!response.ok) throw new Error("Error al aceptar la solicitud de match");
+
+            // Actualizar el estado para reflejar el nuevo match
+            setFriends([...friends, requests.find(user => user.sender_user.id === userId)]);
+            setRequests(requests.filter(user => user.sender_user.id !== userId));
+
+        } catch (error) {
+            console.error("Error al aceptar match:", error);
         }
-    }, []);
+    };
 
     return (
         <div className="container-fluid mt-5">
             <div className="row justify-content-center">
                 <div className="col-md-10">
                     <Tab.Container defaultActiveKey="friends">
-                        {/* Centrar Tabs y aplicar color rojo con Bootstrap */}
                         <Nav variant="tabs" className="justify-content-center border-danger">
                             <Nav.Item>
                                 <Nav.Link eventKey="friends" className="text-danger fw-bold">Amigos</Nav.Link>
@@ -58,7 +72,7 @@ export const Matches = () => {
                         </Nav>
 
                         <Tab.Content>
-                            {/* Contenido de los amigos */}
+                            {/* Lista de Amigos */}
                             <Tab.Pane eventKey="friends">
                                 <div className="card p-4 w-100" style={{ backgroundColor: "#FBECE5" }}>
                                     {friends.length > 0 ? (
@@ -70,13 +84,16 @@ export const Matches = () => {
                                                         alt="Perfil"
                                                         className="img-fluid rounded-circle"
                                                         style={{ cursor: "pointer", width: "150px", height: "150px", objectFit: "cover" }}
+                                                        onClick={() => navigate(`/user/${user.id}`)}
                                                     />
                                                 </div>
                                                 <div className="col-md-8">
                                                     <h3 className="fw-bold">{user.name}</h3>
                                                     <p>{user.description || "No hay descripción disponible"}</p>
                                                     <div className="text-center mt-4">
-                                                        <button className="btn btn-dark shadow">Chatear</button>
+                                                        <button className="btn btn-dark shadow" onClick={() => navigate("/chat", { state: user })}>
+                                                            Chatear
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -87,25 +104,28 @@ export const Matches = () => {
                                 </div>
                             </Tab.Pane>
 
-                            {/* Contenido de solicitudes de match */}
+                            {/* Lista de Solicitudes */}
                             <Tab.Pane eventKey="requests">
                                 <div className="card p-4 w-100" style={{ backgroundColor: "#FBECE5" }}>
                                     {requests.length > 0 ? (
-                                        requests.map((user, index) => (
+                                        requests.map((request, index) => (
                                             <div className="row mb-4" key={index}>
                                                 <div className="col-md-4 text-center">
                                                     <img
-                                                        src={user.image || "https://archive.org/download/placeholder-image/placeholder-image.jpg"}
+                                                        src={request.sender_user.image || "https://archive.org/download/placeholder-image/placeholder-image.jpg"}
                                                         alt="Perfil"
                                                         className="img-fluid rounded-circle"
                                                         style={{ cursor: "pointer", width: "150px", height: "150px", objectFit: "cover" }}
+                                                        onClick={() => navigate(`/user/${request.sender_user.id}`)}
                                                     />
                                                 </div>
                                                 <div className="col-md-8">
-                                                    <h3 className="fw-bold">{user.name}</h3>
-                                                    <p>{user.description || "No hay descripción disponible"}</p>
+                                                    <h3 className="fw-bold">{request.sender_user.name}</h3>
+                                                    <p>{request.sender_user.description || "No hay descripción disponible"}</p>
                                                     <div className="text-center mt-4">
-                                                        <button className="btn btn-success shadow">Aceptar</button>
+                                                        <button className="btn btn-success shadow" onClick={() => acceptRequest(request.sender_user.id)}>
+                                                            Aceptar
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>

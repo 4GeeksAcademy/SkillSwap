@@ -8,7 +8,6 @@ import Footer from "./component/Footer";
 import { ProtectedRoute } from "./component/ProtectedRoute";
 import { Home } from "./pages/home";
 import { SignUp } from "./pages/signup";
-import { UserCard } from "./pages/usercard";
 import { MyAccount } from "./pages/my-account";
 import { Feed } from "./pages/feed";
 import { Chat } from "./pages/chat";
@@ -36,14 +35,7 @@ const Layout = () => {
           <Routes>
             <Route element={<Home />} path="/" />
             <Route element={<Feed />} path="/feed" />
-            <Route
-              element={
-                <ProtectedRoute>
-                  <UserCard />
-                </ProtectedRoute>
-              }
-              path="/UserCard"
-            />
+            
             <Route
               element={
                 <ProtectedRoute>

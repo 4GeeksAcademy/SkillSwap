@@ -97,11 +97,11 @@ export const Feed = () => {
                                                 <button className="btn btn-dark shadow" onClick={() => goToChat(data.user)}>Chatear</button>
                                             ) : (
                                                 <button
-                                                    className={`btn shadow ${data.match_status === "pending" ? "btn-secondary" : "btn-success"}`}
+                                                    className={`btn shadow ${data.match_status === "pending" ? "btn-secondary" : "btn-danger"}`}
                                                     onClick={() => requestMatch(data.user.id)}
                                                     disabled={data.match_status === "pending"}
                                                 >
-                                                    {data.match_status === "pending" ? "Solicitud Enviada" : "Hacer Match 💚"}
+                                                    {data.match_status === "pending" ? "Solicitud Enviada" : "MATCH"}
                                                 </button>
                                             )}
                                         </div>
