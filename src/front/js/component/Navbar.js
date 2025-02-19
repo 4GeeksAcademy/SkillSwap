@@ -18,22 +18,23 @@ const Navbar = () => {
         <Link to="/feed">Feed</Link>
         <Link to="/about">Sobre Nosotros</Link>
         <Link to="/pricing">Nuestros planes</Link>
+        {store.auth.isAuthenticated && <Link to="/my-account">Mi Perfil</Link>}
         <Link to="/mas">Más</Link>
       </div>
-      {!store.auth.isAuthenticated ? (
-        <div>
-          <Link to="/login">
-            <button>Log-In</button>
-          </Link>
-          <Link to="/signup">
-            <button>Registrate</button>
-          </Link>
-        </div>
-      ) : (
-        <div>
+      <div>
+        {!store.auth.isAuthenticated ? (
+          <>
+            <Link to="/login">
+              <button>Log-In</button>
+            </Link>
+            <Link to="/signup">
+              <button>Registrate</button>
+            </Link>
+          </>
+        ) : (
           <LogoutButton />
-        </div>
-      )}
+        )}
+      </div>
     </nav>
   );
 };
