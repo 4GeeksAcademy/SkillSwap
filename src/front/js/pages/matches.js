@@ -16,7 +16,7 @@ export const Matches = () => {
 
         const fetchMatches = async () => {
             try {
-                const response = await fetch(`https://shiny-tribble-v6gjwv44p9r43rp6-3001.app.github.dev/api/matches/${loggedUser.id}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/matches/${loggedUser.id}`);
                 if (!response.ok) throw new Error("Error al obtener matches");
                 const data = await response.json();
                 setFriends(data);
@@ -27,7 +27,7 @@ export const Matches = () => {
 
         const fetchRequests = async () => {
             try {
-                const response = await fetch(`https://shiny-tribble-v6gjwv44p9r43rp6-3001.app.github.dev/api/match-requests/${loggedUser.id}`);
+                const response = await fetch(`${process.env.BACKEND_URL}/api/match-requests/${loggedUser.id}`);
                 if (!response.ok) throw new Error("Error al obtener solicitudes");
                 const data = await response.json();
                 setRequests(data);
