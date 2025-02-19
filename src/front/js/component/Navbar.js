@@ -15,6 +15,7 @@ const Navbar = () => {
         </Link>
       </div>
       <div>
+        <Link to="/feed">Feed</Link>
         <Link to="/about">Sobre Nosotros</Link>
         <Link to="/pricing">Nuestros planes</Link>
         {store.auth.isAuthenticated && <Link to="/my-account">Mi Perfil</Link>}

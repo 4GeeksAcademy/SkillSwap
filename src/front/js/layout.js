@@ -10,12 +10,14 @@ import { Home } from "./pages/home";
 import { SignUp } from "./pages/signup";
 import { UserCard } from "./pages/usercard";
 import { MyAccount } from "./pages/my-account";
+import { Feed } from "./pages/feed";
 import { Chat } from "./pages/chat";
 import { About } from "./pages/about";
 import Login from "./pages/login";
 import Pricing from "./pages/pricing";
 import injectContext from "./store/appContext";
 import { UserProfile } from "./pages/userprofile";
+import { Matches } from "./pages/matches";
 
 //create your first component
 const Layout = () => {
@@ -33,6 +35,7 @@ const Layout = () => {
         <ScrollToTop>
           <Routes>
             <Route element={<Home />} path="/" />
+            <Route element={<Feed />} path="/feed" />
             <Route
               element={
                 <ProtectedRoute>
@@ -58,6 +61,7 @@ const Layout = () => {
               path="/Chat"
             />
             <Route element={<UserProfile />} path="/user/:id" />
+            <Route element={<Matches />} path="/Matches" />
             <Route element={<About />} path="/About" />
             <Route element={<SignUp />} path="/SignUp" />
             <Route element={<Login />} path="/login" />

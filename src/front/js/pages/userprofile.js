@@ -2,21 +2,23 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 export const UserProfile = () => {
-    const { id } = useParams();
+    const { id } = useParams(); 
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const response = await fetch(`/users/${id}`);
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
+                const response = await fetch(`https://shiny-tribble-v6gjwv44p9r43rp6-3001.app.github.dev//api/users/${id}`); 
+                if (!response.ok) throw new Error("Usuario no encontrado");
+
                 const data = await response.json();
                 setUser(data);
             } catch (error) {
                 console.error("Error fetching user:", error);
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -27,7 +29,8 @@ export const UserProfile = () => {
         navigate("/chat", { state: user });
     };
 
-    if (!user) return <p className="text-center mt-5">Cargando usuario...</p>;
+    if (loading) return <p className="text-center mt-5">Cargando usuario...</p>;
+    if (!user) return <p className="text-center mt-5 text-danger">Usuario no encontrado</p>;
 
     return (
         <div className="container-fluid mt-5">
@@ -36,19 +39,28 @@ export const UserProfile = () => {
                     <div className="card p-3 w-100" style={{ backgroundColor: "#FBECE5" }}>
                         <div className="row">
                             <div className="col-md-4 text-center">
-                                <img src={user.image} alt="Perfil" className="img-fluid rounded-circle" />
+                                <img 
+                                    src={user.image || "https://archive.org/download/placeholder-image/placeholder-image.jpg"}  
+                                    alt="Perfil" 
+                                    className="img-fluid rounded-circle" 
+                                    style={{ width: "150px", height: "150px", objectFit: "cover" }}
+                                />
                                 <div className="mt-3">
-                                    {user.skills?.map((skill, i) => (
-                                        <span key={i} className="badge bg-secondary me-1">{skill.name}</span>
-                                    ))}
+                                    {user.skills && user.skills.length > 0 ? (
+                                        user.skills.map((skill, i) => (
+                                            <span key={i} className="badge bg-secondary me-1">{skill.name}</span>
+                                        ))
+                                    ) : (
+                                        <span className="badge bg-warning">Sin habilidades registradas</span>
+                                    )}
                                 </div>
                             </div>
 
                             <div className="col-md-8">
                                 <h3 className="fw-bold">{user.name}</h3>
-                                <p>{user.description}</p>
-                                <p><strong>Email:</strong> {user.email}</p>
-                                <p><strong>Fecha de Registro:</strong> {user.date}</p>
+                                <p>{user.description || "No hay descripción disponible"}</p>
+                                <p><strong>Email:</strong> {user.email || "No disponible"}</p>
+                                <p><strong>Fecha de Registro:</strong> {user.date || "No disponible"}</p>
 
                                 <div className="text-center mt-4">
                                     <button className="btn btn-dark shadow" onClick={goToChat}>Chatear</button>
