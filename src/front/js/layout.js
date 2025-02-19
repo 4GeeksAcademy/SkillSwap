@@ -9,12 +9,11 @@ import { ProtectedRoute } from "./component/ProtectedRoute";
 import { Home } from "./pages/home";
 import { SignUp } from "./pages/signup";
 import { UserCard } from "./pages/usercard";
-import { Feed } from "./pages/feed";
+import { MyAccount } from "./pages/my-account";
 import { Chat } from "./pages/chat";
 import { About } from "./pages/about";
 import Login from "./pages/login";
 import Pricing from "./pages/pricing";
-import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 import { UserProfile } from "./pages/userprofile";
 
@@ -44,12 +43,11 @@ const Layout = () => {
             />
             <Route
               element={
-                
-                  
-                  <Feed />
-                
+                <ProtectedRoute>
+                  <MyAccount />
+                </ProtectedRoute>
               }
-              path="/feed"
+              path="/my-account"
             />
             <Route
               element={
@@ -64,7 +62,6 @@ const Layout = () => {
             <Route element={<SignUp />} path="/SignUp" />
             <Route element={<Login />} path="/login" />
             <Route element={<Pricing />} path="/pricing" />
-            <Route element={<Single />} path="/single/:theid" />
             <Route element={<h1>Not found!</h1>} />
           </Routes>
         </ScrollToTop>
