@@ -12,6 +12,7 @@ def setup_admin(app):
     admin = Admin(app, name='4Geeks Admin', template_mode='bootstrap3')
 
     class UserAdmin(ModelView):
+        column_list = ('id', 'name', 'last_name', 'email', 'password', 'last_name', 'is_active', 'is_visible', 'created_at', 'profile_pic_src')
         column_searchable_list = ('name', 'last_name', 'email')
         column_filters = ('is_active',)
 
