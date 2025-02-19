@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export const PrivateSpace = () => {
+export const Feed = () => {
     const navigate = useNavigate();
     const [users, setUsers] = useState([]); // State to hold user data
 

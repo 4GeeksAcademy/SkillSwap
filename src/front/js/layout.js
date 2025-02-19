@@ -15,6 +15,7 @@ import { About } from "./pages/about";
 import Login from "./pages/login";
 import Pricing from "./pages/pricing";
 import injectContext from "./store/appContext";
+import { UserProfile } from "./pages/userprofile";
 
 //create your first component
 const Layout = () => {
@@ -56,6 +57,7 @@ const Layout = () => {
               }
               path="/Chat"
             />
+            <Route element={<UserProfile />} path="/user/:id" />
             <Route element={<About />} path="/About" />
             <Route element={<SignUp />} path="/SignUp" />
             <Route element={<Login />} path="/login" />
