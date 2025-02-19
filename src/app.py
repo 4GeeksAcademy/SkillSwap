@@ -18,6 +18,7 @@ from api.routes.messages import messages_bp
 from api.routes.skill import skills_bp
 from api.routes.feed import feed_bp
 from api.routes.logout import logout_bp
+from api import models
 
 # Configuration
 ENV = "development" if os.getenv("FLASK_DEBUG") == "1" else "production"

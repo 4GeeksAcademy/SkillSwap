@@ -109,6 +109,24 @@ class Match(db.Model):
             "match_date": self.match_date
         }
 
+class MatchRequest(db.Model):
+    
+    id = db.Column(db.Integer, primary_key=True)
+    sender_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    match_request_date = db.Column(db.DateTime(), unique=False, nullable=False, default=db.func.now())
+
+    def __repr__(self):
+        return f'<MatchRequest {self.id}>'
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "sender_user_id": self.sender_user_id,
+            "receiver_user_id": self.receiver_user_id,
+            "match_request_date": self.match_request_date
+        }
+
 class Conversation(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
