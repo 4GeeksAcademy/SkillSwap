@@ -1,6 +1,41 @@
 import React from "react";
 
 export const About = () => {
+
+    const styles = {
+        container: {
+            backgroundColor: "#F5ECE5",
+            minHeight: "100vh",
+            padding: "1rem 0"
+        },
+        foundersSection: {
+            textAlign: "center",
+            marginTop: "3rem"
+        },
+        founderCard: {
+            border: "1px solid #ddd",
+            padding: "8px", // Reduced padding for smaller cards
+            borderRadius: "8px",
+            boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+            backgroundColor: "white",
+            marginBottom: "0.5rem" 
+        },
+        founderImage: {
+            width: "50%", // Adjusted to make images smaller
+            height: "auto", 
+            borderRadius: "50%"
+        },
+        founderName: {
+            marginTop: "0.5rem", // Reduced top margin
+            fontWeight: "bold",
+            fontSize: "1rem" // Smaller font size
+        },
+        founderRole: {
+            color: "#6c757d",
+            fontSize: "0.9rem" // Smaller font size
+        }
+    };
+
     return (
         <div className="container-fluid min-vh-100" style={{ backgroundColor: "#F5ECE5" }}>
             <div className="container-fluid py-5">
@@ -58,29 +93,29 @@ export const About = () => {
                     </p>
                 </div>
 
-                {/* Sección "The Founders" */}
-                <div className="text-center mt-5">
+         {/* Sección "The Founders" */}
+         <div style={styles.foundersSection}>
                     <h3 className="fw-bold">The Founders</h3>
-                    <div className="row mt-4">
-                        <div className="col-md-6">
-                            <div className="border p-3 rounded shadow-sm bg-white">
-                                <img src="https://i.pinimg.com/736x/35/d4/a6/35d4a62fad980e8f5a410d3a6bc3f219.jpg" alt="Founder 1" className="img-fluid rounded w-100" />
-                                <h5 className="mt-3 fw-bold">Lucia Canalda</h5>
-                                <p className="text-muted">Co-Founder</p>
+                    <div className="row mt-4 justify-content-center">
+                        <div className="col-md-4 col-6">
+                            <div style={styles.founderCard}>
+                                <img src="https://i.pinimg.com/736x/35/d4/a6/35d4a62fad980e8f5a410d3a6bc3f219.jpg" alt="Founder 1" style={styles.founderImage} />
+                                <h5 style={styles.founderName}>Lucia Canalda</h5>
+                                <p style={styles.founderRole}>Co-Founder</p>
                             </div>
                         </div>
-                        <div className="col-md-6">
-                            <div className="border p-3 rounded shadow-sm bg-white">
-                                <img src="https://i.pinimg.com/736x/8a/28/49/8a2849a63361dde038c098fa2827d2b4.jpg" alt="Founder 2" className="img-fluid rounded w-100" />
-                                <h5 className="mt-3 fw-bold">Aaron barcos</h5>
-                                <p className="text-muted">Co-Founder</p>
+                        <div className="col-md-4 col-6">
+                            <div style={styles.founderCard}>
+                                <img src="https://i.pinimg.com/736x/8a/28/49/8a2849a63361dde038c098fa2827d2b4.jpg" alt="Founder 2" style={styles.founderImage} />
+                                <h5 style={styles.founderName}>Aaron Barcos</h5>
+                                <p style={styles.founderRole}>Co-Founder</p>
                             </div>
                         </div>
-                        <div className="col-md-6">
-                            <div className="border p-3 rounded shadow-sm bg-white">
-                                <img src="https://i.pinimg.com/736x/cf/55/a3/cf55a38599b8bc9d88897970d32b02eb.jpg" alt="Founder 2" className="img-fluid rounded w-100" />
-                                <h5 className="mt-3 fw-bold">Alejandro Gil</h5>
-                                <p className="text-muted">Co-Founder</p>
+                        <div className="col-md-4 col-6">
+                            <div style={styles.founderCard}>
+                                <img src="https://i.pinimg.com/736x/cf/55/a3/cf55a38599b8bc9d88897970d32b02eb.jpg" alt="Founder 3" style={styles.founderImage} />
+                                <h5 style={styles.founderName}>Alejandro Gil</h5>
+                                <p style={styles.founderRole}>Co-Founder</p>
                             </div>
                         </div>
                     </div>

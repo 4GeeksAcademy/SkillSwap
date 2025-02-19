@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "../../styles/navbar.css";
 import { Context } from "../store/appContext";
 import { LogoutButton } from "./LogoutButton";
+import logo from '../../img/logo.png'; 
 
 const Navbar = () => {
   const { store } = useContext(Context);
@@ -11,7 +12,7 @@ const Navbar = () => {
     <nav>
       <div className="navbar-logo">
         <Link to="/">
-          <img src="https://previews.dropbox.com/p/thumb/ACjmNKaFNlOlq8GujX0shm7o9uHqIU5UIfQxaQnf0afQhIkmqENzejMWe4YmLikydZqpcomPh1_kdQL44BrrouGLDXV2jzESI7m2Fihmfy12zxiB0IjXLzY5Uoye7fZOidevV0ZB4KZvvAHp1naLNoZhnSnJf3ueM1th9zrdWo7w1zvzkcK2Mmnrd3n0UdUdajPA-5875ieUcHznBHgR0h48EVtCYN0wLkQ7gU-xB6wz8zLRM4DyDGH6hy_j2vg7HTX9lrRv_TAtpSUzR2b7lisddyLchKp8eGCP5cdq5Anj-3IQCoCgFNONzZgHC6BFfVYP334DbZyUTRGmpK-JtILg/p.png?is_prewarmed=true" alt="Logo" />
+        <img src={logo} alt="Logo" /> 
         </Link>
       </div>
       <div>
