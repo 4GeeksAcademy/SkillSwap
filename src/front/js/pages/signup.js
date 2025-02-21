@@ -40,7 +40,7 @@ export const SignUp = () => {
             type="text"
             className="form-control input"
             id="nombre"
-            placeholder="Aaron"
+            placeholder="Nombre"
             required
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -54,7 +54,7 @@ export const SignUp = () => {
             type="text"
             className="form-control input"
             id="apellidos"
-            placeholder="Barcos Caballero"
+            placeholder="Apellidos"
             required
             value={last_name}
             onChange={(e) => setLastname(e.target.value)}
