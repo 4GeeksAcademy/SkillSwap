@@ -18,6 +18,7 @@ export const Matches = () => {
                 const response = await fetch(`${process.env.BACKEND_URL}/api/match-requests/${store.auth.user.id}`);
                 if (!response.ok) throw new Error("Error al obtener match requests");
                 const data = await response.json();
+                console.log("Solicitudes de match recibidas: ", data);
                 setMatchesRequests(data);
             } catch (error) {
                 console.error("Error fetching match requests:", error);
@@ -39,6 +40,8 @@ export const Matches = () => {
         fetchMatches();
     }, [store?.auth?.user?.id]);
 
+
+    
     const acceptMatch = async (userId, requestMatchId) => {
         try {
             const response = await fetch(`${process.env.BACKEND_URL}/api/match`, {
@@ -109,9 +112,19 @@ export const Matches = () => {
                                                         <h3 className="fw-bold">{friend.name} {friend.last_name}</h3>
                                                         <p>{friend.description || "No hay descripción disponible"}</p>
                                                         <div className="text-center mt-4">
-                                                            <button className="btn btn-dark shadow">
-                                                                Chatear
-                                                            </button>
+                                                        <button
+    className="btn btn-dark shadow"
+    onClick={() => {
+        if (friend.phone_number) {
+            const whatsappLink = `https://wa.me/${friend.phone_number}`;
+            window.open(whatsappLink, "_blank"); // Abrir en una nueva pestaña
+        } else {
+            alert("Este usuario no ha proporcionado un número de WhatsApp.");
+        }
+    }}
+>
+    Chatear
+</button>
                                                         </div>
                                                     </div>
                                                 </div>
