@@ -5,7 +5,13 @@ feed_bp = Blueprint('feed_bp', __name__)
 
 @feed_bp.route('/feed/<int:user_id>', methods=['GET'])
 def get_feed(user_id):
-    users = User.query.filter(User.id != user_id).all()
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+    
+    query = User.query.filter(User.id != user_id)
+    pagination = query.paginate(page=page, per_page=per_page, error_out=False)
+    users = pagination.items
+    
     feed = []
     
     for user in users:
@@ -44,4 +50,10 @@ def get_feed(user_id):
             "conversation": conversation_id
         })
     
-    return jsonify(feed), 200
+    return jsonify({
+        "feed": feed,
+        "page": pagination.page,
+        "per_page": pagination.per_page,
+        "total": pagination.total,
+        "pages": pagination.pages,
+    }), 200

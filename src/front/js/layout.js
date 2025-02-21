@@ -35,23 +35,8 @@ const Layout = () => {
           <Routes>
             <Route element={<Home />} path="/" />
             <Route element={<Feed />} path="/feed" />
-            
-            <Route
-              element={
-                <ProtectedRoute>
-                  <MyAccount />
-                </ProtectedRoute>
-              }
-              path="/my-account"
-            />
-            <Route
-              element={
-                <ProtectedRoute>
-                  <Chat />
-                </ProtectedRoute>
-              }
-              path="/Chat"
-            />
+            <Route element={<MyAccount />} path="/my-account" />
+            <Route element={<Chat />} path="/Chat" />
             <Route element={<UserProfile />} path="/user/:id" />
             <Route element={<Matches />} path="/Matches" />
             <Route element={<About />} path="/About" />

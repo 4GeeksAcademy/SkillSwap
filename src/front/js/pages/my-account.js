@@ -22,10 +22,45 @@ export const MyAccount = () => {
   const [error, setError] = useState(null);
   const [showModal, setShowModal] = useState(false);
 
-  const skillCategories = ["Art", "Design", "Development", "Marketing", "Music", "Photography", "Video", "Writing", "Other"];
-  const skillSubcategories = ["Graphic Design", "Illustration", "Motion Graphics", "Web Design", "UX/UI", "Frontend", "Backend", "Fullstack", "Mobile", "SEO", "Social Media", "Email Marketing", "Copywriting", "Songwriting", "Composing", "Production", "Mixing/Mastering", "Photography", "Video Editing", "Screenwriting", "Blogging", "Ghostwriting", "Other"];
+  const skillCategories = [
+    "Art",
+    "Design",
+    "Development",
+    "Marketing",
+    "Music",
+    "Photography",
+    "Video",
+    "Writing",
+    "Other",
+  ];
+  const skillSubcategories = [
+    "Graphic Design",
+    "Illustration",
+    "Motion Graphics",
+    "Web Design",
+    "UX/UI",
+    "Frontend",
+    "Backend",
+    "Fullstack",
+    "Mobile",
+    "SEO",
+    "Social Media",
+    "Email Marketing",
+    "Copywriting",
+    "Songwriting",
+    "Composing",
+    "Production",
+    "Mixing/Mastering",
+    "Photography",
+    "Video Editing",
+    "Screenwriting",
+    "Blogging",
+    "Ghostwriting",
+    "Other",
+  ];
 
   useEffect(() => {
+    if (!store?.auth?.user?.id) return;
     fetch(`${process.env.BACKEND_URL}/api/users/${store.auth.user.id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -37,8 +72,12 @@ export const MyAccount = () => {
           profile_pic_src: data.profile_pic_src || "",
         });
         if (data.skills) {
-          const lookingForSkill = data.skills.find((skill) => skill.skill_type === "Looking For") || { id: null, skill_category: "", skill_subcategory: "" };
-          const offeringSkill = data.skills.find((skill) => skill.skill_type === "Offering") || { id: null, skill_category: "", skill_subcategory: "" };
+          const lookingForSkill = data.skills.find(
+            (skill) => skill.skill_type === "Looking For"
+          ) || { id: null, skill_category: "", skill_subcategory: "" };
+          const offeringSkill = data.skills.find(
+            (skill) => skill.skill_type === "Offering"
+          ) || { id: null, skill_category: "", skill_subcategory: "" };
           setSkills({ lookingFor: lookingForSkill, offering: offeringSkill });
         }
         setLoading(false);
@@ -47,7 +86,7 @@ export const MyAccount = () => {
         setError(err);
         setLoading(false);
       });
-  }, [store.auth.user.id]);
+  }, [store.auth?.user?.id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -72,13 +111,19 @@ export const MyAccount = () => {
     data.append("folder", "SkillSwap");
 
     try {
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/upload`, {
-        method: "POST",
-        body: data,
-      });
+      const res = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.CLOUDINARY_CLOUD_NAME}/upload`,
+        {
+          method: "POST",
+          body: data,
+        }
+      );
       const result = await res.json();
       if (result.secure_url) {
-        setFormData((prevData) => ({ ...prevData, profile_pic_src: result.secure_url }));
+        setFormData((prevData) => ({
+          ...prevData,
+          profile_pic_src: result.secure_url,
+        }));
       } else {
         throw new Error("Error al subir la imagen");
       }
@@ -91,14 +136,84 @@ export const MyAccount = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      await fetch(`${process.env.BACKEND_URL}/api/users/${store.auth.user.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, skills }),
-      });
+    setError(null);
 
-      setUser({ ...user, ...formData, skills });
+    try {
+      // Actualizar datos del usuario (excluyendo skills)
+      const userResponse = await fetch(
+        `${process.env.BACKEND_URL}/api/users/${store.auth.user.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!userResponse.ok) {
+        throw new Error("Error actualizando el usuario");
+      }
+      const updatedUser = await userResponse.json();
+
+      // Función auxiliar para actualizar o crear una skill
+      const updateOrCreateSkill = async (skillData, type) => {
+        // Se arma el payload con el tipo de skill y el id del usuario
+        const skillPayload = {
+          skill_category: skillData.skill_category,
+          skill_subcategory: skillData.skill_subcategory,
+          skill_type: type === "lookingFor" ? "Looking For" : "Offering",
+          user_id: store.auth.user.id,
+        };
+
+        if (skillData.id) {
+          // Si ya existe la skill, se actualiza
+          const res = await fetch(
+            `${process.env.BACKEND_URL}/api/skills/${skillData.id}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(skillPayload),
+            }
+          );
+          if (!res.ok) {
+            throw new Error("Error actualizando la skill");
+          }
+          return await res.json();
+        } else {
+          // Si no existe, se crea (si se han completado alguno de los campos)
+          if (skillData.skill_category || skillData.skill_subcategory) {
+            const res = await fetch(`${process.env.BACKEND_URL}/api/skills`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(skillPayload),
+            });
+            if (!res.ok) {
+              throw new Error("Error creando la skill");
+            }
+            return await res.json();
+          }
+          return null;
+        }
+      };
+
+      // Actualizar o crear la skill "Looking For"
+      const updatedLookingFor = await updateOrCreateSkill(
+        skills.lookingFor,
+        "lookingFor"
+      );
+      // Actualizar o crear la skill "Offering"
+      const updatedOffering = await updateOrCreateSkill(
+        skills.offering,
+        "offering"
+      );
+
+      // Actualizar el estado local del usuario con los cambios en skills
+      setUser({
+        ...updatedUser,
+        skills: {
+          lookingFor: updatedLookingFor || skills.lookingFor,
+          offering: updatedOffering || skills.offering,
+        },
+      });
       setShowModal(false);
       alert("Perfil actualizado exitosamente");
     } catch (err) {
@@ -108,23 +223,48 @@ export const MyAccount = () => {
   };
 
   if (loading) return <p className="text-center mt-5">Cargando usuario...</p>;
-  if (error) return <p className="text-center mt-5 text-danger">{error.message}</p>;
+  if (error)
+    return <p className="text-center mt-5 text-danger">{error.message}</p>;
 
   return (
     <div className="container-fluid mt-5">
       <div className="row justify-content-center">
         <div className="col-md-8">
-          <div className="card p-3 w-100" style={{ backgroundColor: "#FBECE5" }}>
+          <div
+            className="card p-3 w-100"
+            style={{ backgroundColor: "#FBECE5" }}
+          >
             <div className="row">
               <div className="col-md-4 text-center">
-                <img src={user.profile_pic_src || "https://archive.org/download/placeholder-image/placeholder-image.jpg"} alt="Perfil" className="img-fluid rounded-circle" style={{ width: "150px", height: "150px", objectFit: "cover" }} />
+                <img
+                  src={
+                    user.profile_pic_src ||
+                    "https://archive.org/download/placeholder-image/placeholder-image.jpg"
+                  }
+                  alt="Perfil"
+                  className="img-fluid rounded-circle"
+                  style={{
+                    width: "150px",
+                    height: "150px",
+                    objectFit: "cover",
+                  }}
+                />
               </div>
               <div className="col-md-8">
-                <h3 className="fw-bold">{user.name} {user.last_name}</h3>
+                <h3 className="fw-bold">
+                  {user.name} {user.last_name}
+                </h3>
                 <p>{user.description || "No hay descripción disponible"}</p>
-                <p><strong>Email:</strong> {user.email || "No disponible"}</p>
+                <p>
+                  <strong>Email:</strong> {user.email || "No disponible"}
+                </p>
                 <div className="text-center mt-4">
-                  <button className="btn btn-dark shadow" onClick={() => setShowModal(true)}>Editar</button>
+                  <button
+                    className="btn btn-dark shadow"
+                    onClick={() => setShowModal(true)}
+                  >
+                    Editar
+                  </button>
                 </div>
               </div>
             </div>
@@ -140,101 +280,143 @@ export const MyAccount = () => {
         <Modal.Body>
           <form onSubmit={handleSubmit}>
             <label>Foto de Perfil</label>
-            <input type="file" className="form-control" onChange={handleFileChange} />
+            <input
+              type="file"
+              className="form-control"
+              onChange={handleFileChange}
+            />
             {uploading && <p>Subiendo imagen...</p>}
-            {formData.profile_pic_src && <img src={formData.profile_pic_src} alt="Perfil" className="img-thumbnail mt-2" style={{ maxWidth: "150px" }} />}
+            {formData.profile_pic_src && (
+              <img
+                src={formData.profile_pic_src}
+                alt="Perfil"
+                className="img-thumbnail mt-2"
+                style={{ maxWidth: "150px" }}
+              />
+            )}
 
-            <input type="text" className="form-control mt-3" name="name" value={formData.name} onChange={handleInputChange} placeholder="Nombre" />
-            
+            <input
+              type="text"
+              className="form-control mt-3"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              placeholder="Nombre"
+            />
+
             <div className="mb-3">
-          <label htmlFor="last_name" className="form-label">
-            Apellido
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            id="last_name"
-            name="last_name"
-            value={formData.last_name}
-            onChange={handleInputChange}
-          />
-        </div>
-        <textarea className="form-control mt-3" name="description" rows="3" value={formData.description} onChange={handleInputChange} placeholder="Descripción"></textarea>
+              <label htmlFor="last_name" className="form-label">
+                Apellido
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="last_name"
+                name="last_name"
+                value={formData.last_name}
+                onChange={handleInputChange}
+              />
+            </div>
+            <textarea
+              className="form-control mt-3"
+              name="description"
+              rows="3"
+              value={formData.description}
+              onChange={handleInputChange}
+              placeholder="Descripción"
+            ></textarea>
 
             {/* Sección de skills */}
-        <h3>Skill que buscas</h3>
-        <div className="mb-3">
-          <label className="form-label">Categoría</label>
-          <select
-            value={skills.lookingFor.skill_category}
-            onChange={(e) =>
-              handleSkillChange("lookingFor", "skill_category", e.target.value)
-            }
-            className="form-select"
-          >
-            <option value="">Selecciona una categoría</option>
-            {skillCategories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Subcategoría</label>
-          <select
-            value={skills.lookingFor.skill_subcategory}
-            onChange={(e) =>
-              handleSkillChange("lookingFor", "skill_subcategory", e.target.value)
-            }
-            className="form-select"
-          >
-            <option value="">Selecciona una subcategoría</option>
-            {skillSubcategories.map((subcat) => (
-              <option key={subcat} value={subcat}>
-                {subcat}
-              </option>
-            ))}
-          </select>
-        </div>
-        <h3>Skill que ofreces</h3>
-        <div className="mb-3">
-          <label className="form-label">Categoría</label>
-          <select
-            value={skills.offering.skill_category}
-            onChange={(e) =>
-              handleSkillChange("offering", "skill_category", e.target.value)
-            }
-            className="form-select"
-          >
-            <option value="">Selecciona una categoría</option>
-            {skillCategories.map((cat) => (
-              <option key={cat} value={cat}>
-                {cat}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="mb-3">
-          <label className="form-label">Subcategoría</label>
-          <select
-            value={skills.offering.skill_subcategory}
-            onChange={(e) =>
-              handleSkillChange("offering", "skill_subcategory", e.target.value)
-            }
-            className="form-select"
-          >
-            <option value="">Selecciona una subcategoría</option>
-            {skillSubcategories.map((subcat) => (
-              <option key={subcat} value={subcat}>
-                {subcat}
-              </option>
-            ))}
-          </select>
-        </div>
+            <h3>Skill que buscas</h3>
+            <div className="mb-3">
+              <label className="form-label">Categoría</label>
+              <select
+                value={skills.lookingFor.skill_category}
+                onChange={(e) =>
+                  handleSkillChange(
+                    "lookingFor",
+                    "skill_category",
+                    e.target.value
+                  )
+                }
+                className="form-select"
+              >
+                <option value="">Selecciona una categoría</option>
+                {skillCategories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Subcategoría</label>
+              <select
+                value={skills.lookingFor.skill_subcategory}
+                onChange={(e) =>
+                  handleSkillChange(
+                    "lookingFor",
+                    "skill_subcategory",
+                    e.target.value
+                  )
+                }
+                className="form-select"
+              >
+                <option value="">Selecciona una subcategoría</option>
+                {skillSubcategories.map((subcat) => (
+                  <option key={subcat} value={subcat}>
+                    {subcat}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <h3>Skill que ofreces</h3>
+            <div className="mb-3">
+              <label className="form-label">Categoría</label>
+              <select
+                value={skills.offering.skill_category}
+                onChange={(e) =>
+                  handleSkillChange(
+                    "offering",
+                    "skill_category",
+                    e.target.value
+                  )
+                }
+                className="form-select"
+              >
+                <option value="">Selecciona una categoría</option>
+                {skillCategories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Subcategoría</label>
+              <select
+                value={skills.offering.skill_subcategory}
+                onChange={(e) =>
+                  handleSkillChange(
+                    "offering",
+                    "skill_subcategory",
+                    e.target.value
+                  )
+                }
+                className="form-select"
+              >
+                <option value="">Selecciona una subcategoría</option>
+                {skillSubcategories.map((subcat) => (
+                  <option key={subcat} value={subcat}>
+                    {subcat}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-
-            <Button type="submit" variant="primary" className="mt-3">Guardar cambios</Button>
+            <Button type="submit" variant="primary" className="mt-3">
+              Guardar cambios
+            </Button>
           </form>
         </Modal.Body>
       </Modal>

@@ -44,11 +44,16 @@ def update_skill(skill_id):
         return jsonify({"error": "Skill not found"}), 404
 
     data = request.get_json()
-    skill_category = data.get('skill_category')
-    skill_subcategory = data.get('skill_subcategory')
 
-    if not skill_category or not skill_subcategory:
-        return jsonify({"error": "Missing required fields"}), 400
+    try:
+        skill_category = SkillCategory(data.get('skill_category'))
+    except ValueError:
+        return jsonify({"error": "Invalid skill_category"}), 400
+
+    try:
+        skill_subcategory = SkillSubcategory(data.get('skill_subcategory'))
+    except ValueError:
+        return jsonify({"error": "Invalid skill_subcategory"}), 400
 
     skill.skill_category = skill_category
     skill.skill_subcategory = skill_subcategory
