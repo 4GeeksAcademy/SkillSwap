@@ -1,3 +1,5 @@
+// feed.js
+
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
@@ -6,27 +8,29 @@ export const Feed = () => {
   const { store } = useContext(Context);
   const navigate = useNavigate();
   const [feeddata, setFeeddata] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     if (!store?.auth?.user?.id) return;
     const fetchUsersWithSkills = async () => {
       try {
         const response = await fetch(
-          `${process.env.BACKEND_URL}/api/feed/${store.auth.user.id}`
+          `${process.env.BACKEND_URL}/api/feed/${store.auth.user.id}?page=${page}&per_page=5`
         );
         if (!response.ok) {
           throw new Error("Error al obtener usuarios");
         }
         let data = await response.json();
-
-        setFeeddata(data);
+        setFeeddata(data.feed);
+        setTotalPages(data.pages);
       } catch (error) {
         console.error("Error fetching users:", error);
       }
     };
 
     fetchUsersWithSkills();
-  }, [store?.auth?.user?.id]);
+  }, [store?.auth?.user?.id, page]);
 
   const goToUserProfile = (user) => {
     navigate(`/user/${user.id}`);
@@ -88,10 +92,7 @@ export const Feed = () => {
     <div className="container-fluid mt-5">
       <div className="row justify-content-center">
         <div className="col-md-10">
-          <div
-            className="card p-4 w-100"
-            style={{ backgroundColor: "#FBECE5" }}
-          >
+          <div className="card p-4 w-100 bg-light shadow-sm">
             {feeddata.map((data, index) => (
               <div className="row mb-4" key={index}>
                 <div className="col-md-4 text-center">
@@ -101,14 +102,9 @@ export const Feed = () => {
                       "https://archive.org/download/placeholder-image/placeholder-image.jpg"
                     }
                     alt="Perfil"
-                    className="img-fluid rounded-circle"
-                    style={{
-                      cursor: "pointer",
-                      width: "150px",
-                      height: "150px",
-                      objectFit: "cover",
-                    }}
+                    className="img-fluid rounded-circle cursor-pointer"
                     onClick={() => goToUserProfile(data.user)}
+                    style={{ width: "150px", aspectRatio: "1", objectFit: "cover" }}
                   />
                   <div className="mt-3">
                     {data.user.skills && data.user.skills.length > 0 ? (
@@ -127,8 +123,7 @@ export const Feed = () => {
                 <div className="col-md-8">
                   <div className="card-body">
                     <h3
-                      className="fw-bold"
-                      style={{ cursor: "pointer" }}
+                      className="fw-bold cursor-pointer"
                       onClick={() => goToUserProfile(data.user)}
                     >
                       {data.user.name}
@@ -137,10 +132,6 @@ export const Feed = () => {
                       {data.user.description || "No hay descripción disponible"}
                     </p>
                     <div className="text-center mt-5">
-                      <p className="text-muted">
-                        {data.user.date || "Fecha no disponible"}
-                      </p>
-
                       {data.match_status === "matched" ? (
                         <button
                           className="btn btn-dark shadow"
@@ -174,6 +165,27 @@ export const Feed = () => {
           </div>
         </div>
       </div>
+      <nav aria-label="Page navigation" className="mt-4">
+        <div className="d-flex justify-content-center align-items-center">
+          <button
+            className={`btn ${page === 1 ? "disabled" : ""} me-3`}
+            onClick={() => setPage(page - 1)}
+            disabled={page === 1}
+          >
+            Anterior
+          </button>
+          <span>
+            Página {page} de {totalPages}
+          </span>
+          <button
+            className={`btn ${page === totalPages ? "disabled" : ""} ms-3`}
+            onClick={() => setPage(page + 1)}
+            disabled={page === totalPages}
+          >
+            Siguiente
+          </button>
+        </div>
+      </nav>
     </div>
   );
 };

@@ -26,6 +26,7 @@ export const MyAccount = () => {
   const skillSubcategories = ["Graphic Design", "Illustration", "Motion Graphics", "Web Design", "UX/UI", "Frontend", "Backend", "Fullstack", "Mobile", "SEO", "Social Media", "Email Marketing", "Copywriting", "Songwriting", "Composing", "Production", "Mixing/Mastering", "Photography", "Video Editing", "Screenwriting", "Blogging", "Ghostwriting", "Other"];
 
   useEffect(() => {
+    if (!store?.auth?.user?.id) return;
     fetch(`${process.env.BACKEND_URL}/api/users/${store.auth.user.id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -47,7 +48,7 @@ export const MyAccount = () => {
         setError(err);
         setLoading(false);
       });
-  }, [store.auth.user.id]);
+  }, [store.auth?.user?.id]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
