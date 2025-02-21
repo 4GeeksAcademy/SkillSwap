@@ -139,15 +139,17 @@ export const MyAccount = () => {
         </Modal.Header>
         <Modal.Body>
           <form onSubmit={handleSubmit}>
-            <label>Foto de Perfil</label>
+            <label className="my-3">Foto de Perfil</label>
             <input type="file" className="form-control" onChange={handleFileChange} />
             {uploading && <p>Subiendo imagen...</p>}
             {formData.profile_pic_src && <img src={formData.profile_pic_src} alt="Perfil" className="img-thumbnail mt-2" style={{ maxWidth: "150px" }} />}
-
-            <input type="text" className="form-control mt-3" name="name" value={formData.name} onChange={handleInputChange} placeholder="Nombre" />
+            <label className="my-3">
+            Nombre
+          </label>
+            <input type="text" className="form-control " name="name" value={formData.name} onChange={handleInputChange} placeholder="Nombre" />
             
             <div className="mb-3">
-          <label htmlFor="last_name" className="form-label">
+          <label className="my-3">
             Apellido
           </label>
           <input
@@ -158,8 +160,11 @@ export const MyAccount = () => {
             value={formData.last_name}
             onChange={handleInputChange}
           />
-        </div>
-        <textarea className="form-control mt-3" name="description" rows="3" value={formData.description} onChange={handleInputChange} placeholder="Descripción"></textarea>
+        </div> 
+        <label>
+            Descripción
+          </label>
+        <textarea className="form-control my-3" name="description" rows="3" value={formData.description} onChange={handleInputChange} placeholder="Descripción"></textarea>
 
             {/* Sección de skills */}
         <h3>Skill que buscas</h3>

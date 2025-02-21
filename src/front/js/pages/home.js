@@ -6,7 +6,7 @@ export const Home = () => {
         const { store, actions } = useContext(Context);
 
         return (
-                <div className="container-fluid min-vh-100 min-vw-100">
+                <div className="container-fluid p-0 min-vh-100 min-vw-100">
 
                         <div className="text-center py-5" style={{ backgroundColor: "#FBEDE6" }}>
                                 <h1 className="fw-bold">
