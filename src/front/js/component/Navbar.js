@@ -11,7 +11,7 @@ const Navbar = () => {
    
     <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: 'white', padding: '0.2rem', borderBottom: '1px solid black' }}>
       <div className="container-fluid">
-        {/* Logo */}
+       
         <div className="navbar-logo">
           <Link to="/">
             <img 
@@ -23,7 +23,7 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* Botón hamburguesa para pantallas pequeñas */}
+      
         <button
           className="navbar-toggler "
           type="button"
@@ -74,10 +74,10 @@ const Navbar = () => {
           <div className="d-flex">
             {!store.auth.isAuthenticated ? (
               <>
-                <Link to="/login" className="btn btn-outline-primary me-2" style={{ fontWeight: 'bold', transition: 'background-color 0.3s ease' }}>
+                <Link to="/login" className="btn btn-outline-dark me-2" style={{ fontWeight: 'bold', transition: 'background-color 0.3s ease' }}>
                   Log-In
                 </Link>
-                <Link to="/signup" className="btn btn-primary" style={{ fontWeight: 'bold', transition: 'background-color 0.3s ease' }}>
+                <Link to="/signup" className="btn btn-dark" style={{ fontWeight: 'bold', transition: 'background-color 0.3s ease' }}>
                   Registrate
                 </Link>
               </>
