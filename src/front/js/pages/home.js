@@ -94,6 +94,27 @@ export const Home = () => {
     );
     setfeedData(filtered);
   };
+  
+  if (!store.auth.user) {
+    return (
+      <div className="login-background">
+        <div className="container">
+          <div className="card p-4" style={{ backgroundColor: "#FBECE5" }}>
+            <p className="text-center">
+              <a href="/login" className="text-decoration-none">
+                Inicia sesión
+              </a>{" "}
+              o{" "}
+              <a href="/signup" className="text-decoration-none">
+                regístrate
+              </a>{" "}
+              para ver el feed
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container-fluid min-vh-100 min-vw-100">
