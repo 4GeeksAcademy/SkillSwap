@@ -25,10 +25,6 @@ export const UserProfile = () => {
         fetchUser();
     }, [id]);
 
-    const goToChat = () => {
-        navigate("/chat", { state: user });
-    };
-
     if (loading) return <p className="text-center mt-5">Cargando usuario...</p>;
     if (!user) return <p className="text-center mt-5 text-danger">Usuario no encontrado</p>;
 
@@ -40,7 +36,7 @@ export const UserProfile = () => {
                         <div className="row">
                             <div className="col-md-4 text-center">
                                 <img 
-                                    src={user.image || "https://archive.org/download/placeholder-image/placeholder-image.jpg"}  
+                                    src={user.profile_pic_src || "https://archive.org/download/placeholder-image/placeholder-image.jpg"}  
                                     alt="Perfil" 
                                     className="img-fluid rounded-circle" 
                                     style={{ width: "150px", height: "150px", objectFit: "cover" }}
@@ -62,9 +58,6 @@ export const UserProfile = () => {
                                 <p><strong>Email:</strong> {user.email || "No disponible"}</p>
                                 <p><strong>Fecha de Registro:</strong> {user.date || "No disponible"}</p>
 
-                                <div className="text-center mt-4">
-                                    <button className="btn btn-dark shadow" onClick={goToChat}>Chatear</button>
-                                </div>
                             </div>
                         </div>
                     </div>

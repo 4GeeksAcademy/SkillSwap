@@ -87,7 +87,11 @@ export const SignUp = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        <button type="submit" className="btn button">
+        <button
+          type="submit"
+          className="btn button"
+          disabled={!name || !last_name || !email || !password}
+        >
           Registrarse
         </button>
       </form>

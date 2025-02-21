@@ -1,5 +1,3 @@
-// feed.js
-
 import React, { useEffect, useState, useContext } from "react";
 import { Context } from "../store/appContext";
 import { useNavigate } from "react-router-dom";
@@ -166,7 +164,7 @@ export const Feed = () => {
         </div>
       </div>
       <nav aria-label="Page navigation" className="mt-4">
-        <div className="d-flex justify-content-center align-items-center">
+        <div style={{ margin: "0 auto" }} className="d-flex justify-content-center align-items-center">
           <button
             className={`btn ${page === 1 ? "disabled" : ""} me-3`}
             onClick={() => setPage(page - 1)}

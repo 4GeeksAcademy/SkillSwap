@@ -20,7 +20,7 @@ const Login = () => {
   return (
     <div className="login-background">
       <div className="text-center mb-4" style={{ marginTop: "2rem" }}>
-        <h1>Inicia Sesion</h1>
+        <h1>Inicia Sesión</h1>
         <hr style={{ width: "100%", margin: "0 auto", borderColor: "black" }} />
       </div>
       <form onSubmit={handleSubmit} className="container">
@@ -46,7 +46,11 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="btn button">
+        <button
+          type="submit"
+          className="btn button"
+          disabled={!email || !password}
+        >
           Log In
         </button>
       </form>
