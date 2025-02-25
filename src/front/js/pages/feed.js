@@ -34,9 +34,7 @@ export const Feed = () => {
     navigate(`/user/${user.id}`);
   };
 
-  const goToChat = (user) => {
-    navigate("/chat", { state: user });
-  };
+  
 
   const requestMatch = async (userId) => {
     try {
@@ -132,11 +130,19 @@ export const Feed = () => {
                     <div className="text-center mt-5">
                       {data.match_status === "matched" ? (
                         <button
-                          className="btn btn-dark shadow"
-                          onClick={() => goToChat(data.user)}
-                        >
-                          Chatear
-                        </button>
+                        className="btn btn-dark shadow"
+                        onClick={() => {
+                            if (data.user.phone) { // Cambiamos phone_number por phone
+                                const whatsappLink = `https://wa.me/${data.user.phone}`;
+                                window.open(whatsappLink, "_blank");
+                            } else {
+                                alert("Este usuario no ha proporcionado un número de WhatsApp.");
+                            }
+                        }}
+                    >
+                        Chatear
+                    </button>
+                    
                       ) : (
                         <button
                           className={`btn shadow ${

@@ -7,7 +7,7 @@ export const Matches = () => {
     const { store } = useContext(Context);
     const navigate = useNavigate();
     const [matchesRequests, setMatchesRequests] = useState([]);
-    // Aquí "friends" contendrá la data de matches, donde cada match incluye "other_user"
+
     const [friends, setFriends] = useState([]);
 
     useEffect(() => {
@@ -41,7 +41,7 @@ export const Matches = () => {
     }, [store?.auth?.user?.id]);
 
 
-    
+
     const acceptMatch = async (userId, requestMatchId) => {
         try {
             const response = await fetch(`${process.env.BACKEND_URL}/api/match`, {
@@ -90,6 +90,7 @@ export const Matches = () => {
                                     {friends.length > 0 ? (
                                         friends.map((match, index) => {
                                             const friend = match.friend;
+                                            console.log("Datos del amigo:", friend);
                                             return (
                                                 <div className="row mb-4" key={index}>
                                                     <div className="col-md-4 text-center">
@@ -112,19 +113,20 @@ export const Matches = () => {
                                                         <h3 className="fw-bold">{friend.name} {friend.last_name}</h3>
                                                         <p>{friend.description || "No hay descripción disponible"}</p>
                                                         <div className="text-center mt-4">
-                                                        <button
-    className="btn btn-dark shadow"
-    onClick={() => {
-        if (friend.phone_number) {
-            const whatsappLink = `https://wa.me/${friend.phone_number}`;
-            window.open(whatsappLink, "_blank"); // Abrir en una nueva pestaña
-        } else {
-            alert("Este usuario no ha proporcionado un número de WhatsApp.");
-        }
-    }}
->
-    Chatear
-</button>
+                                                            <button
+                                                                className="btn btn-dark shadow"
+                                                                onClick={() => {
+                                                                    if (friend.phone) { // Ahora usamos friend.phone en lugar de friend.phone_number
+                                                                        const whatsappLink = `https://wa.me/${friend.phone}`;
+                                                                        window.open(whatsappLink, "_blank");
+                                                                    } else {
+                                                                        alert("Este usuario no ha proporcionado un número de WhatsApp.");
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Chatear
+                                                            </button>
+
                                                         </div>
                                                     </div>
                                                 </div>

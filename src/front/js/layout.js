@@ -10,7 +10,6 @@ import { Home } from "./pages/home";
 import { SignUp } from "./pages/signup";
 import { MyAccount } from "./pages/my-account";
 import { Feed } from "./pages/feed";
-import { Chat } from "./pages/chat";
 import { About } from "./pages/about";
 import Login from "./pages/login";
 import Pricing from "./pages/pricing";
@@ -36,7 +35,6 @@ const Layout = () => {
             <Route element={<Home />} path="/" />
             <Route element={<Feed />} path="/feed" />
             <Route element={<MyAccount />} path="/my-account" />
-            <Route element={<Chat />} path="/Chat" />
             <Route element={<UserProfile />} path="/user/:id" />
             <Route element={<Matches />} path="/Matches" />
             <Route element={<About />} path="/About" />

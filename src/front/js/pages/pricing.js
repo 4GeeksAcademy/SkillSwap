@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'; // Import Link for navigation
 import "../../styles/pricing.css"; 
 
 const Pricing = () => {
-    // Sample reviews data
+    
     const reviews = [
         {
             id: 1,
@@ -31,15 +31,15 @@ const Pricing = () => {
         }
     ];
 
-    // State to track the current review index
+   
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Function to go to the next review
+
     const nextReview = () => {
         setCurrentIndex((prevIndex) => (prevIndex + 1) % reviews.length);
     };
 
-    // Function to go to the previous review
+ 
     const prevReview = () => {
         setCurrentIndex((prevIndex) => (prevIndex - 1 + reviews.length) % reviews.length);
     };

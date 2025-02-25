@@ -52,9 +52,7 @@ const Footer = () => {
 
                   
                     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-                        <button style={{ backgroundColor: '#CD4631', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '20px' }}>
-                            Download App
-                        </button>
+                        
                       
                         <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
                             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
