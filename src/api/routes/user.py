@@ -46,6 +46,7 @@ def update_user(user_id):
     user.last_name = data.get('last_name', user.last_name)
     user.description = data.get('description', user.description)
     user.profile_pic_src = data.get('profile_pic_src', user.profile_pic_src)
+    user.phone = data.get ('phone', user.phone)
 
     try:
         db.session.commit()

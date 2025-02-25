@@ -70,6 +70,7 @@ export const MyAccount = () => {
           last_name: data.last_name || "",
           description: data.description || "",
           profile_pic_src: data.profile_pic_src || "",
+          phone: data.phone || "",
         });
         if (data.skills) {
           const lookingForSkill = data.skills.find(
@@ -139,7 +140,7 @@ export const MyAccount = () => {
     setError(null);
 
     try {
-      // Actualizar datos del usuario (excluyendo skills)
+      
       const userResponse = await fetch(
         `${process.env.BACKEND_URL}/api/users/${store.auth.user.id}`,
         {
@@ -154,9 +155,9 @@ export const MyAccount = () => {
       }
       const updatedUser = await userResponse.json();
 
-      // Función auxiliar para actualizar o crear una skill
+      
       const updateOrCreateSkill = async (skillData, type) => {
-        // Se arma el payload con el tipo de skill y el id del usuario
+       
         const skillPayload = {
           skill_category: skillData.skill_category,
           skill_subcategory: skillData.skill_subcategory,
@@ -165,7 +166,7 @@ export const MyAccount = () => {
         };
 
         if (skillData.id) {
-          // Si ya existe la skill, se actualiza
+          
           const res = await fetch(
             `${process.env.BACKEND_URL}/api/skills/${skillData.id}`,
             {
@@ -179,7 +180,7 @@ export const MyAccount = () => {
           }
           return await res.json();
         } else {
-          // Si no existe, se crea (si se han completado alguno de los campos)
+          
           if (skillData.skill_category || skillData.skill_subcategory) {
             const res = await fetch(`${process.env.BACKEND_URL}/api/skills`, {
               method: "POST",
@@ -195,18 +196,18 @@ export const MyAccount = () => {
         }
       };
 
-      // Actualizar o crear la skill "Looking For"
+      
       const updatedLookingFor = await updateOrCreateSkill(
         skills.lookingFor,
         "lookingFor"
       );
-      // Actualizar o crear la skill "Offering"
+      
       const updatedOffering = await updateOrCreateSkill(
         skills.offering,
         "offering"
       );
 
-      // Actualizar el estado local del usuario con los cambios en skills
+    
       setUser({
         ...updatedUser,
         skills: {
@@ -317,6 +318,20 @@ export const MyAccount = () => {
                 onChange={handleInputChange}
               />
             </div>
+            <div className="mb-3">
+              <label htmlFor="phone" className="form-label">
+                Telefono
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+              />
+            </div>
+
             <textarea
               className="form-control mt-3"
               name="description"

@@ -49,6 +49,7 @@ class User(db.Model):
     last_name = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    phone = db.Column(db.String(255), unique=False, nullable=True)
     created_at = db.Column(db.DateTime(), unique=False, nullable=False, default=db.func.now())
     profile_pic_src = db.Column(db.String(120), unique=False, nullable=True)
     description = db.Column(db.String(255), unique=False, nullable=True)
@@ -66,7 +67,8 @@ class User(db.Model):
             "last_name": self.last_name,
             "created_at": self.created_at,
             "profile_pic_src": self.profile_pic_src,
-            "is_active": self.is_active
+            "is_active": self.is_active,
+            "phone": self.phone,
             # do not serialize the password, its a security breach
         }
 

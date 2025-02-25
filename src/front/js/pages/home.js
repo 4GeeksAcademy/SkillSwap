@@ -21,7 +21,7 @@ export const Home = () => {
     "Other",
   ];
 
-  // Al cargar los datos, guarda también la lista original:
+
   useEffect(() => {
     if (!store?.auth?.user?.id) return;
     const fetchUsersWithSkills = async () => {
@@ -34,7 +34,7 @@ export const Home = () => {
         }
         let data = await response.json();
         setfeedData(data.feed);
-        setOriginalFeedData(data.feed); // Guarda la lista original
+        setOriginalFeedData(data.feed); 
         setTotalPages(data.pages);
       } catch (error) {
         console.error("Error fetching users:", error);
@@ -207,12 +207,19 @@ export const Home = () => {
                       </div>
                       <div className="text-center mb-3">
                         {data.match_status === "matched" ? (
-                          <button
-                            className="btn btn-dark shadow"
-                            onClick={() => goToChat(data.user)}
-                          >
-                            Chatear
-                          </button>
+                         <button
+                         className="btn btn-dark shadow"
+                         onClick={() => {
+                             if (data.user.phone) { // Cambiamos phone_number por phone
+                                 const whatsappLink = `https://wa.me/${data.user.phone}`;
+                                 window.open(whatsappLink, "_blank");
+                             } else {
+                                 alert("Este usuario no ha proporcionado un número de WhatsApp.");
+                             }
+                         }}
+                     >
+                         Chatear
+                     </button>
                         ) : (
                           <button
                             className={`btn shadow ${
