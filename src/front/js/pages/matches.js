@@ -123,7 +123,7 @@ export const Matches = () => {
         }
     }}
 >
-    Chatear
+    Chatear!
 </button>
                                                         </div>
                                                     </div>
